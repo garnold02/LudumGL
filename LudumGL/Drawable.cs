@@ -128,6 +128,7 @@ namespace LudumGL
             {
                 int uniform = GL.GetUniformLocation(program, name);
                 uniforms.Add(name, uniform);
+                
             }
             int location = uniforms[name];
             GL.Uniform1(location, value);
