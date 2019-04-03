@@ -37,7 +37,7 @@ namespace TestGame
 
         public override void Update(object sender, FrameEventArgs e)
         {
-
+            drawable.rotation *= Matrix4.CreateFromQuaternion(Quaternion.FromEulerAngles(0, 0.01f, 0));
         }
 
         public override void Render(object sender, FrameEventArgs e)
