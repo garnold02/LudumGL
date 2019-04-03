@@ -19,10 +19,7 @@ namespace LudumGL
         readonly int uvBuffer;
 
         public Mesh mesh;
-        public Matrix4 translation;
-        public Matrix4 rotation;
-        public Matrix4 scale;
-        public Matrix4 projection;
+        public Transform transform;
 
         public Drawable()
         {
@@ -86,7 +83,7 @@ namespace LudumGL
 
         }
 
-        public void Render()
+        public void Render(Camera camera)
         {
             GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBuffer);
             GL.EnableVertexAttribArray(0);
@@ -101,10 +98,10 @@ namespace LudumGL
             GL.VertexAttribPointer(2, 4, VertexAttribPointerType.Float, false, 0, 0);
 
             GL.UseProgram(program);
-            SetMatrix4("translation", translation);
-            SetMatrix4("rotation", rotation);
-            SetMatrix4("scale", scale);
-            SetMatrix4("projection", projection);
+            SetMatrix4("translation", transform.TranslationMatrix);
+            SetMatrix4("rotation", transform.RotationMatrix);
+            SetMatrix4("scale", transform.ScaleMatrix);
+            SetMatrix4("projection", (camera.Transform.TranslationMatrix * camera.Transform.RotationMatrix) * camera.Projection);
             //Set light data
             for (int i = 0; i < Game.activeLights.Length; i++)
             {

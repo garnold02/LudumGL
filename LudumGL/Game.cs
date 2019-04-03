@@ -9,10 +9,11 @@ namespace LudumGL
         public static InitialSettings initialSettigns = InitialSettings.Default;
         public static GameLoop gameLoop;
         public static Light[] activeLights;
+        public static Camera mainCamera;
 
         public static float AspectRatio { get => window.Width / (float)window.Height; }
 
-        static GameWindow window;
+        internal static GameWindow window;
 
         public static void Start()
         {
@@ -20,10 +21,14 @@ namespace LudumGL
             {
                 Title = initialSettigns.Title
             };
+            window.UpdateFrame += PreUpdate;
             window.UpdateFrame += gameLoop.Update;
             window.UpdateFrame += PostUpdate;
             window.RenderFrame += gameLoop.Render;
             window.RenderFrame += PostRender;
+            window.KeyDown += Input.KeyPress;
+            window.KeyUp += Input.KeyRelease;
+            window.Resize += Resize;
 
             Initialize();
             gameLoop.Start();
@@ -37,6 +42,11 @@ namespace LudumGL
             activeLights = new Light[10];
         }
 
+        static void PreUpdate(object sender, FrameEventArgs e)
+        {
+            Input.Update();
+        }
+
         static void PostUpdate(object sender, FrameEventArgs e)
         {
 
@@ -47,6 +57,11 @@ namespace LudumGL
             window.SwapBuffers();
             GL.ClearColor(0, 0, 0, 1);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+        }
+        
+        static void Resize(object sender, EventArgs e)
+        {
+            GL.Viewport(0, 0, window.Width, window.Height);
         }
     }
     public struct InitialSettings
