@@ -12,7 +12,7 @@ namespace LudumGL
         /// <summary>
         /// Returns the identity transformation.
         /// </summary>
-        public static Transform Identity { get => new Transform() { position = new Vector3(0, 0, 0), rotation = Quaternion.Identity, scale = new Vector3(1, 1, 1) }; }
+        public static Transform Identity { get => new Transform() { localPosition = new Vector3(0, 0, 0), localRotation = Quaternion.Identity, localScale = new Vector3(1, 1, 1) }; }
 
         public Transform Parent { get; set; } = null;
 
@@ -24,7 +24,7 @@ namespace LudumGL
             get
             {
                 if (Parent == null) return LocalTranslationMatrix;
-                return Parent.TranslationMatrix * (Matrix4.CreateTranslation(position) * Parent.ScaleMatrix * Parent.RotationMatrix);
+                return (Matrix4.CreateTranslation(Parent.ScaleMatrix.ExtractScale() * localPosition) * Parent.RotationMatrix) * Parent.TranslationMatrix;
             }
         }
 
@@ -35,8 +35,8 @@ namespace LudumGL
         {
             get
             {
-                if (Parent == null) return LocalTranslationMatrix;
-                return Parent.RotationMatrix* Matrix4.CreateFromQuaternion(rotation);
+                if (Parent == null) return LocalRotationMatrix;
+                return LocalRotationMatrix;
             }
         }
 
@@ -47,8 +47,8 @@ namespace LudumGL
         {
             get
             {
-                if (Parent == null) return LocalTranslationMatrix;
-                return Parent.ScaleMatrix* Matrix4.CreateScale(scale);
+                if (Parent == null) return LocalScaleMatrix;
+                return Parent.ScaleMatrix * Matrix4.CreateScale(localScale);
             }
         }
 
@@ -65,21 +65,25 @@ namespace LudumGL
             }
         }
 
+        public Vector3 Position { get => TranslationMatrix.ExtractTranslation(); }
+        public Quaternion Rotation { get => localRotation * Parent.Rotation; }
+        public Vector3 Scale { get => ScaleMatrix.ExtractScale(); }
+
 
         /// <summary>
         /// Returns the translation matrix of this Transform (local).
         /// </summary>
-        public Matrix4 LocalTranslationMatrix { get => Matrix4.CreateTranslation(position); }
+        public Matrix4 LocalTranslationMatrix { get => Matrix4.CreateTranslation(localPosition); }
 
         /// <summary>
         /// Returns the rotation matrix of this transform (local).
         /// </summary>
-        public Matrix4 LocalRotationMatrix { get => Matrix4.CreateFromQuaternion(rotation); }
+        public Matrix4 LocalRotationMatrix { get => Matrix4.CreateFromQuaternion(localRotation); }
 
         /// <summary>
         /// Returns the scale matrix of this transform (local).
         /// </summary>
-        public Matrix4 LocalScaleMatrix { get => Matrix4.CreateScale(scale); }
+        public Matrix4 LocalScaleMatrix { get => Matrix4.CreateScale(localScale); }
 
         /// <summary>
         /// Returns the product of the rotation, scale, and translation matrices.
@@ -90,7 +94,7 @@ namespace LudumGL
         /// <summary>
         /// The local right vector.
         /// </summary>
-        public Vector3 Right { get => (RotationMatrix * new Vector4(-1, 0, 0, 0)).Xyz; }
+        public Vector3 Right { get => (RotationMatrix * new Vector4(1, 0, 0, 0)).Xyz; }
 
         /// <summary>
         /// The local up vector.
@@ -100,22 +104,22 @@ namespace LudumGL
         /// <summary>
         /// The local forward vector.
         /// </summary>
-        public Vector3 Forward { get => (RotationMatrix * new Vector4(0, 0, 1, 0)).Xyz; }
+        public Vector3 Forward { get => (RotationMatrix * new Vector4(0, 0, -1, 0)).Xyz; }
 
         /// <summary>
         /// The position component of this Transform.
         /// </summary>
-        public Vector3 position=new Vector3(0,0,0);
+        public Vector3 localPosition=new Vector3(0,0,0);
 
         /// <summary>
         /// The rotation component of this Transform.
         /// </summary>
-        public Quaternion rotation=Quaternion.Identity;
+        public Quaternion localRotation=Quaternion.Identity;
 
         /// <summary>
         /// The scale component of this Transform.
         /// </summary>
-        public Vector3 scale=new Vector3(1,1,1);
+        public Vector3 localScale=new Vector3(1,1,1);
 
         /// <summary>
         /// Rotates the Transform relative to itself.
@@ -123,7 +127,7 @@ namespace LudumGL
         /// <param name="rotation"></param>
         public void Rotate(Quaternion rotation)
         {
-            this.rotation = rotation * this.rotation;
+            this.localRotation = rotation * this.localRotation;
         }
 
         /// <summary>
@@ -132,7 +136,7 @@ namespace LudumGL
         /// <param name="rotation"></param>
         public void Rotate(Vector3 rotation)
         {
-            this.rotation = Quaternion.FromEulerAngles(MathHelper.DegreesToRadians(rotation.X), MathHelper.DegreesToRadians(rotation.Y), MathHelper.DegreesToRadians(rotation.Z)) * this.rotation;
+            this.localRotation = Quaternion.FromEulerAngles(MathHelper.DegreesToRadians(rotation.X), MathHelper.DegreesToRadians(rotation.Y), MathHelper.DegreesToRadians(rotation.Z)) * this.localRotation;
         }
 
         /// <summary>
@@ -141,7 +145,7 @@ namespace LudumGL
         /// <param name="rotation"></param>
         public void Rotate(float x, float y, float z)
         {
-            rotation = Quaternion.FromEulerAngles(MathHelper.DegreesToRadians(x), MathHelper.DegreesToRadians(y), MathHelper.DegreesToRadians(z)) * rotation;
+            localRotation = Quaternion.FromEulerAngles(MathHelper.DegreesToRadians(x), MathHelper.DegreesToRadians(y), MathHelper.DegreesToRadians(z)) * localRotation;
         }
         
     }
