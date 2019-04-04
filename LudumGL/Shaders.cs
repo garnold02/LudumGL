@@ -1,4 +1,5 @@
 ﻿using System;
+using OpenTK.Graphics.OpenGL;
 
 namespace LudumGL
 {
@@ -7,12 +8,23 @@ namespace LudumGL
     /// </summary>
     public class Shaders
     {
-
         /// <summary>
         /// Vertex shader. Transform vertices from world space
         /// to screen space. Must be used always.
         /// </summary>
-        public static string Projection { get; } = @"
+        public static Shader Projection { get => new Shader(ProjectionCode, true, ShaderType.VertexShader); }
+
+        /// <summary>
+        /// Fragment shader. Supports Phong lighting.
+        /// </summary>
+        public static Shader Lit { get => new Shader(LitCode, true, ShaderType.FragmentShader); }
+
+        /// <summary>
+        /// Simple unlit shader with variable color.
+        /// </summary>
+        public static Shader Unlit { get => new Shader(UnlitCode, true, ShaderType.FragmentShader); }
+        #region Code
+        static string ProjectionCode { get; } = @"
 
 #version 440
 
@@ -38,15 +50,13 @@ void main() {
 
         ";
 
-        /// <summary>
-        /// Fragment shader. Supports Phong lighting.
-        /// </summary>
-        public static string Lit { get; } = @"
+        static string LitCode { get; } = @"
 
 #version 440
 
 struct Light {
     float enabled;
+    float type;
     mat4 translation;
     mat4 rotation;
     vec4 color;
@@ -78,7 +88,8 @@ void main() {
         float lightDistance=length(lightConnection);
 
         float rangeMod=1-clamp(lightDistance/light.range,0,1);
-        float diffuse=dot(lightDirection,normalRot)/lightDistance;
+        if(light.type==1) rangeMod=1;
+        float diffuse=clamp(dot(lightDirection,normalRot),0,1);
 
         vec4 lightColor=light.color*diffuse*rangeMod*light.color.w;
         combinedLightColor+=lightColor;
@@ -88,10 +99,7 @@ void main() {
 
         ";
 
-        /// <summary>
-        /// Simple unlit shader with variable color.
-        /// </summary>
-        public static string Unlit { get; } = @"
+        static string UnlitCode { get; } = @"
 
 #version 440
 
@@ -108,5 +116,6 @@ void main() {
 }
 
         ";
+        #endregion
     }
 }
