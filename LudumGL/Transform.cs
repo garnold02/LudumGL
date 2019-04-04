@@ -14,26 +14,78 @@ namespace LudumGL
         /// </summary>
         public static Transform Identity { get => new Transform() { position = new Vector3(0, 0, 0), rotation = Quaternion.Identity, scale = new Vector3(1, 1, 1) }; }
 
+        public Transform Parent { get; set; } = null;
+
         /// <summary>
         /// Returns the translation matrix of this Transform.
         /// </summary>
-        public Matrix4 TranslationMatrix { get => Matrix4.CreateTranslation(position); }
+        public Matrix4 TranslationMatrix
+        {
+            get
+            {
+                if (Parent == null) return LocalTranslationMatrix;
+                return Parent.TranslationMatrix * (Matrix4.CreateTranslation(position) * Parent.ScaleMatrix * Parent.RotationMatrix);
+            }
+        }
 
         /// <summary>
         /// Returns the rotation matrix of this transform.
         /// </summary>
-        public Matrix4 RotationMatrix { get => Matrix4.CreateFromQuaternion(rotation); }
+        public Matrix4 RotationMatrix
+        {
+            get
+            {
+                if (Parent == null) return LocalTranslationMatrix;
+                return Parent.RotationMatrix* Matrix4.CreateFromQuaternion(rotation);
+            }
+        }
 
         /// <summary>
         /// Returns the scale matrix of this transform.
         /// </summary>
-        public Matrix4 ScaleMatrix { get => Matrix4.CreateScale(scale); }
+        public Matrix4 ScaleMatrix
+        {
+            get
+            {
+                if (Parent == null) return LocalTranslationMatrix;
+                return Parent.ScaleMatrix* Matrix4.CreateScale(scale);
+            }
+        }
 
         /// <summary>
         /// Returns the product of the rotation, scale, and translation matrices.
         /// Represents the whole transformation.
         /// </summary>
-        public Matrix4 Matrix { get => RotationMatrix * ScaleMatrix * TranslationMatrix; }
+        public Matrix4 Matrix
+        {
+            get
+            {
+                if (Parent == null) return LocalTranslationMatrix;
+                return RotationMatrix * ScaleMatrix * TranslationMatrix;
+            }
+        }
+
+
+        /// <summary>
+        /// Returns the translation matrix of this Transform (local).
+        /// </summary>
+        public Matrix4 LocalTranslationMatrix { get => Matrix4.CreateTranslation(position); }
+
+        /// <summary>
+        /// Returns the rotation matrix of this transform (local).
+        /// </summary>
+        public Matrix4 LocalRotationMatrix { get => Matrix4.CreateFromQuaternion(rotation); }
+
+        /// <summary>
+        /// Returns the scale matrix of this transform (local).
+        /// </summary>
+        public Matrix4 LocalScaleMatrix { get => Matrix4.CreateScale(scale); }
+
+        /// <summary>
+        /// Returns the product of the rotation, scale, and translation matrices.
+        /// Represents the whole transformation (local).
+        /// </summary>
+        public Matrix4 LocalMatrix { get => RotationMatrix * ScaleMatrix * TranslationMatrix; }
 
         /// <summary>
         /// The local right vector.
