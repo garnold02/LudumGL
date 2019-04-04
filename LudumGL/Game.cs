@@ -4,6 +4,9 @@ using OpenTK.Graphics.OpenGL;
 
 namespace LudumGL
 {
+    /// <summary>
+    /// The link between your game and the engine.
+    /// </summary>
     public class Game
     {
         public static InitialSettings initialSettigns = InitialSettings.Default;
@@ -64,6 +67,10 @@ namespace LudumGL
             GL.Viewport(0, 0, window.Width, window.Height);
         }
     }
+
+    /// <summary>
+    /// Contains the initial settigns of the game window.
+    /// </summary>
     public struct InitialSettings
     {
         public static InitialSettings Default

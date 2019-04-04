@@ -4,8 +4,17 @@ using a = Assimp;
 
 namespace LudumGL
 {
+    /// <summary>
+    /// Represents a 3D model complete with vertices, indices,
+    /// normals, and uvs.
+    /// </summary>
     public class Mesh
     {
+        /// <summary>
+        /// Import a mesh from a model file.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static Mesh Load(string path)
         {
             Mesh mesh = new Mesh();
@@ -32,9 +41,24 @@ namespace LudumGL
             return mesh;
         }
 
+        /// <summary>
+        /// The vertices of this mesh.
+        /// </summary>
         public Vector4[] vertices;
+
+        /// <summary>
+        /// The normals of this mesh.
+        /// </summary>
         public Vector4[] normals;
+
+        /// <summary>
+        /// The UV coordinates of this mesh.
+        /// </summary>
         public Vector4[] uvs;
+
+        /// <summary>
+        /// The indices of this mesh.
+        /// </summary>
         public int[] indices;
     }
 }

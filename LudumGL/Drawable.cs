@@ -7,6 +7,10 @@ using OpenTK.Graphics.OpenGL;
 
 namespace LudumGL
 {
+    /// <summary>
+    /// Represents an object that can be drawn using
+    /// LudumGL's renderer.
+    /// </summary>
     public class Drawable
     {
         readonly int program;
@@ -18,7 +22,15 @@ namespace LudumGL
         readonly int normalBuffer;
         readonly int uvBuffer;
 
+        /// <summary>
+        /// The mesh data that will be drawn
+        /// using this object.
+        /// </summary>
         public Mesh mesh;
+
+        /// <summary>
+        /// The transform of this object.
+        /// </summary>
         public Transform transform;
 
         public Drawable()
@@ -32,6 +44,11 @@ namespace LudumGL
             uvBuffer = GL.GenBuffer();
         }
 
+        /// <summary>
+        /// Attaches a shader loaded from an external file to this object.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="type"></param>
         public void AddShader(string path, ShaderType type)
         {
             int shader = GL.CreateShader(type);
@@ -42,6 +59,11 @@ namespace LudumGL
             if (log.Length > 0) Console.WriteLine("Shader: {0}", log);
         }
 
+        /// <summary>
+        /// Attaches a shader from raw code to this object.
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="type"></param>
         public void AddShaderRaw(string @code, ShaderType type)
         {
             int shader = GL.CreateShader(type);
@@ -50,6 +72,10 @@ namespace LudumGL
             shaders.Add(shader);
         }
 
+        /// <summary>
+        /// Finalizes this object. Always call before
+        /// trying to draw the object.
+        /// </summary>
         public void Finish()
         {
             int i = 0;
@@ -69,6 +95,9 @@ namespace LudumGL
             Refresh();
         }
 
+        /// <summary>
+        /// Refreshes mesh data.
+        /// </summary>
         public void Refresh()
         {
             GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBuffer);
@@ -83,6 +112,11 @@ namespace LudumGL
 
         }
 
+        /// <summary>
+        /// Renders this object from the view of the
+        /// specified camera.
+        /// </summary>
+        /// <param name="camera"></param>
         public void Render(Camera camera)
         {
             GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBuffer);
@@ -119,6 +153,11 @@ namespace LudumGL
         }
 
         #region UniformSetters
+        /// <summary>
+        /// Pass a float to the shader as an uniform property.
+        /// </summary>
+        /// <param name="name">Property name</param>
+        /// <param name="value"></param>
         public void SetFloat(string name, float value)
         {
             if (!uniforms.ContainsKey(name))
@@ -131,6 +170,11 @@ namespace LudumGL
             GL.Uniform1(location, value);
         }
 
+        /// <summary>
+        /// Pass a 2D vector to the shader as an uniform property.
+        /// </summary>
+        /// <param name="name">Property name</param>
+        /// <param name="value"></param>
         public void SetVector2(string name, Vector2 value)
         {
             if (!uniforms.ContainsKey(name))
@@ -142,6 +186,11 @@ namespace LudumGL
             GL.Uniform2(location, ref value);
         }
 
+        /// <summary>
+        /// Pass a 3D vector to the shader as an uniform property.
+        /// </summary>
+        /// <param name="name">Property name</param>
+        /// <param name="value"></param>
         public void SetVector3(string name, Vector3 value)
         {
             if (!uniforms.ContainsKey(name))
@@ -153,6 +202,11 @@ namespace LudumGL
             GL.Uniform3(location, ref value);
         }
 
+        /// <summary>
+        /// Pass a 4D vector to the shader as an uniform property.
+        /// </summary>
+        /// <param name="name">Property name</param>
+        /// <param name="value"></param>
         public void SetVector4(string name, Vector4 value)
         {
             if (!uniforms.ContainsKey(name))
@@ -164,6 +218,11 @@ namespace LudumGL
             GL.Uniform4(location, ref value);
         }
 
+        /// <summary>
+        /// Pass a 4x4 Matrix to the shader as an uniform property.
+        /// </summary>
+        /// <param name="name">Property name</param>
+        /// <param name="value"></param>
         public void SetMatrix4(string name, Matrix4 value)
         {
             if (!uniforms.ContainsKey(name))

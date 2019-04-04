@@ -2,8 +2,16 @@
 
 namespace LudumGL
 {
+    /// <summary>
+    /// Contains the source codes of default shaders.
+    /// </summary>
     public class Shaders
     {
+
+        /// <summary>
+        /// Vertex shader. Transform vertices from world space
+        /// to screen space. Must be used always.
+        /// </summary>
         public static string Projection { get; } = @"
 
 #version 440
@@ -30,6 +38,9 @@ void main() {
 
         ";
 
+        /// <summary>
+        /// Fragment shader. Supports Phong lighting.
+        /// </summary>
         public static string Lit { get; } = @"
 
 #version 440
@@ -76,6 +87,10 @@ void main() {
 }
 
         ";
+
+        /// <summary>
+        /// Simple unlit shader with variable color.
+        /// </summary>
         public static string Unlit { get; } = @"
 
 #version 440
@@ -86,8 +101,10 @@ in vec4 localPos;
 in vec4 normal;
 in vec4 uv;
 
+uniform vec4 color;
+
 void main() {
-    FragColor=vec4(1,1,1,1);
+    FragColor=color;
 }
 
         ";
