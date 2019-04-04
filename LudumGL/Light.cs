@@ -21,6 +21,11 @@ namespace LudumGL
         public bool enabled;
 
         /// <summary>
+        /// The type of the light.
+        /// </summary>
+        public LightType type;
+
+        /// <summary>
         /// The position of the light.
         /// </summary>
         public Vector3 position;
@@ -41,7 +46,7 @@ namespace LudumGL
         /// </summary>
         public float range;
     }
-    enum LightType
+    public enum LightType
     {
         Point,
         Directional
