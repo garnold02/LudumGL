@@ -9,11 +9,30 @@ namespace LudumGL
     /// </summary>
     public class Game
     {
+        /// <summary>
+        /// The initial settings of the game.
+        /// </summary>
         public static InitialSettings initialSettigns = InitialSettings.Default;
+
+        /// <summary>
+        /// Game loop implementation.
+        /// </summary>
         public static GameLoop gameLoop;
+
+        /// <summary>
+        /// Array that stores the currently used
+        /// lights in the scene.
+        /// </summary>
         public static Light[] activeLights;
+
+        /// <summary>
+        /// The camera that GameObjects will be viewed from.
+        /// </summary>
         public static Camera mainCamera;
 
+        /// <summary>
+        /// The aspect ratio of the window.
+        /// </summary>
         public static float AspectRatio { get => window.Width / (float)window.Height; }
 
         internal static GameWindow window;
@@ -27,6 +46,7 @@ namespace LudumGL
             window.UpdateFrame += PreUpdate;
             window.UpdateFrame += gameLoop.Update;
             window.UpdateFrame += PostUpdate;
+            window.RenderFrame += PreRender;
             window.RenderFrame += gameLoop.Render;
             window.RenderFrame += PostRender;
             window.KeyDown += Input.KeyPress;
@@ -48,11 +68,17 @@ namespace LudumGL
         static void PreUpdate(object sender, FrameEventArgs e)
         {
             Input.Update();
+            GameObject.Update();
         }
 
         static void PostUpdate(object sender, FrameEventArgs e)
         {
 
+        }
+
+        static void PreRender(object sender, FrameEventArgs e)
+        {
+            GameObject.Render();
         }
 
         static void PostRender(object sender, FrameEventArgs e)

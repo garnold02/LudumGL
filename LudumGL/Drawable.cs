@@ -13,6 +13,24 @@ namespace LudumGL
     /// </summary>
     public class Drawable
     {
+        #region Static
+        public static Drawable MakeDrawable(Mesh mesh, params Shader[] shaders)
+        {
+            Drawable drawable = new Drawable
+            {
+                mesh = mesh
+            };
+
+            drawable.AddShader(Shaders.Projection);
+            foreach (Shader shader in shaders)
+            {
+                drawable.AddShader(shader);
+            }
+
+            drawable.Finish();
+            return drawable;
+        }
+        #endregion
         readonly int program;
         List<int> shaders;
         Dictionary<string, int> uniforms;
@@ -45,31 +63,18 @@ namespace LudumGL
         }
 
         /// <summary>
-        /// Attaches a shader loaded from an external file to this object.
+        /// Attaches a shader to this object.
         /// </summary>
         /// <param name="path"></param>
         /// <param name="type"></param>
-        public void AddShader(string path, ShaderType type)
+        public void AddShader(Shader shader)
         {
-            int shader = GL.CreateShader(type);
-            GL.ShaderSource(shader, File.ReadAllText(path));
-            GL.CompileShader(shader);
-            shaders.Add(shader);
-            string log = GL.GetShaderInfoLog(shader);
+            int glShader = GL.CreateShader(shader.Type);
+            GL.ShaderSource(glShader, shader.Code);
+            GL.CompileShader(glShader);
+            shaders.Add(glShader);
+            string log = GL.GetShaderInfoLog(glShader);
             if (log.Length > 0) Console.WriteLine("Shader: {0}", log);
-        }
-
-        /// <summary>
-        /// Attaches a shader from raw code to this object.
-        /// </summary>
-        /// <param name="code"></param>
-        /// <param name="type"></param>
-        public void AddShaderRaw(string @code, ShaderType type)
-        {
-            int shader = GL.CreateShader(type);
-            GL.ShaderSource(shader, code);
-            GL.CompileShader(shader);
-            shaders.Add(shader);
         }
 
         /// <summary>
@@ -119,6 +124,8 @@ namespace LudumGL
         /// <param name="camera"></param>
         public void Render(Camera camera)
         {
+            if (mesh == null) return;
+
             GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBuffer);
             GL.EnableVertexAttribArray(0);
             GL.VertexAttribPointer(0, 4, VertexAttribPointerType.Float, false, 0, 0);
@@ -135,7 +142,7 @@ namespace LudumGL
             SetMatrix4("translation", transform.TranslationMatrix);
             SetMatrix4("rotation", transform.RotationMatrix);
             SetMatrix4("scale", transform.ScaleMatrix);
-            SetMatrix4("projection", (camera.Transform.TranslationMatrix * camera.Transform.RotationMatrix) * camera.Projection);
+            SetMatrix4("projection", (Matrix4.Invert(camera.Transform.TranslationMatrix) * camera.Transform.RotationMatrix) * camera.Projection);
             //Set light data
             for (int i = 0; i < Game.activeLights.Length; i++)
             {
@@ -143,6 +150,7 @@ namespace LudumGL
                 if (light == null) continue;
                 string name = "lights[" + i + "].";
                 SetFloat(name + "enabled", light.enabled ? 1 : 0);
+                SetFloat(name + "type", (int)light.type);
                 SetMatrix4(name + "translation", light.Translation);
                 SetMatrix4(name + "rotation", light.Rotation);
                 SetVector4(name + "color", light.color);
