@@ -24,7 +24,8 @@ namespace LudumGL
             get
             {
                 if (Parent == null) return LocalTranslationMatrix;
-                return (Matrix4.CreateTranslation(Parent.ScaleMatrix.ExtractScale() * localPosition) * Parent.RotationMatrix) * Parent.TranslationMatrix;
+                Vector4 rotatedLocal =  new Vector4(localPosition) * Parent.RotationMatrix;
+                return (Matrix4.CreateTranslation(Parent.ScaleMatrix.ExtractScale() * rotatedLocal.Xyz)) * Parent.TranslationMatrix;
             }
         }
 
@@ -36,7 +37,7 @@ namespace LudumGL
             get
             {
                 if (Parent == null) return LocalRotationMatrix;
-                return LocalRotationMatrix;
+                return LocalRotationMatrix * Parent.RotationMatrix;
             }
         }
 
