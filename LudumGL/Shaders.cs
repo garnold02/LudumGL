@@ -74,6 +74,9 @@ uniform mat4 rotation;
 uniform mat4 scale;
 uniform mat4 projection;
 uniform Light lights[10];
+uniform vec3 ambient;
+
+uniform sampler2D tex;
 
 void main() {
     vec4 combinedLightColor=vec4(0,0,0,1);
@@ -94,7 +97,7 @@ void main() {
         vec4 lightColor=light.color*diffuse*rangeMod*light.color.w;
         combinedLightColor+=lightColor;
     }
-    FragColor=vec4(combinedLightColor.xyz, 1.0);
+    FragColor=texture(tex, uv.xy) * vec4(ambient + combinedLightColor.xyz, 1.0);
 }
 
         ";

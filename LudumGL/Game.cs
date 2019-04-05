@@ -25,6 +25,7 @@ namespace LudumGL
         /// </summary>
         public static Light[] activeLights;
 
+
         /// <summary>
         /// The camera that GameObjects will be viewed from.
         /// </summary>
@@ -34,6 +35,11 @@ namespace LudumGL
         /// The aspect ratio of the window.
         /// </summary>
         public static float AspectRatio { get => window.Width / (float)window.Height; }
+
+        /// <summary>
+        /// Ambient light color of the scene.
+        /// </summary>
+        public static Vector3 AmbientLightColor { get; set; } = new Vector3(0.1f, 0.1f, 0.1f);
 
         internal static GameWindow window;
 
