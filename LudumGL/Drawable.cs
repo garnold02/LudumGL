@@ -42,6 +42,12 @@ namespace LudumGL
         public Mesh mesh;
 
         /// <summary>
+        /// The texture of this object. Null means
+        /// no texture.
+        /// </summary>
+        public Texture texture;
+
+        /// <summary>
         /// The transform of this object.
         /// </summary>
         public Transform transform;
@@ -118,6 +124,7 @@ namespace LudumGL
             SetMatrix4("rotation", transform.RotationMatrix);
             SetMatrix4("scale", transform.ScaleMatrix);
             SetMatrix4("projection", (Matrix4.Invert(camera.Transform.TranslationMatrix) * camera.Transform.RotationMatrix) * camera.Projection);
+            SetVector3("ambient", Game.AmbientLightColor);
             //Set light data
             for (int i = 0; i < Game.activeLights.Length; i++)
             {
@@ -131,6 +138,10 @@ namespace LudumGL
                 SetVector4(name + "color", light.color);
                 SetFloat(name + "range", light.range);
             }
+
+            //Set texture
+            if (texture != null)
+                GL.BindTexture(TextureTarget.Texture2D, texture.glTexture);
 
             GL.DrawElements(PrimitiveType.Triangles, mesh.vertices.Length, DrawElementsType.UnsignedInt, mesh.indices);
         }
