@@ -27,38 +27,14 @@ namespace TestGame
             camera.Transform.localPosition = new Vector3(0, 0, 0);
             Game.mainCamera = camera;
             Input.MouseSensitivity = 0.1f;
-
-            Mesh mesh = Mesh.Load("assets/mesh/sphere.dae");
-            int length = 4;
-            for (int i = 0; i < length; i++)
+            GameObject monkey = new GameObject
             {
-                for (int j = 0; j < length; j++)
-                {
-                    for (int k = 0; k < length; k++)
-                    {
-                        GameObject cube = new GameObject
-                        {
-                            Drawable = Drawable.MakeDrawable(mesh, Shaders.Lit),
-                            Transform = new Transform() { localPosition = new Vector3(i-length/2, j-length/2, k-length/2)*5 }
-                        };
-                        GameObject.Add(cube);
-                    }
-                }
-            }
-            /*monkey = new GameObject
-            {
-                Drawable = Drawable.MakeDrawable(Mesh.Load("assets/mesh/monkey.dae"), Shaders.Lit),
-                Transform = new Transform() { localPosition = new Vector3(0, 0, -5), Parent=cube.Transform},
+                Drawable = Drawable.MakeDrawable(Mesh.Load("assets/mesh/cube_uv.dae"), Shaders.Lit),
+                Transform = new Transform() { localPosition = new Vector3(0, 0, 0) },
             };
-            sphere = new GameObject
-            {
-                Drawable = Drawable.MakeDrawable(Mesh.Load("assets/mesh/sphere.dae"), Shaders.Lit),
-                Transform = new Transform() { localPosition = new Vector3(0, -2, 0), localScale=new Vector3(1,1,1)*0.1f, Parent = monkey.Transform },
-            };
-            GameObject.Add(cube);
+            monkey.Drawable.texture = Texture.LoadFromFile("assets/tex/test.png");
             GameObject.Add(monkey);
-            GameObject.Add(sphere);*/
-
+            monkey.Transform.Rotate(-90, 0, 0);
         }
 
         static float t;
@@ -90,7 +66,7 @@ namespace TestGame
                 camera.Transform.Rotate(0, 0, 2);
             }
             camera.Transform.Rotate(-Input.MouseDelta.Y * Input.MouseSensitivity, -Input.MouseDelta.X * Input.MouseSensitivity, 0);
-            light.position = camera.Transform.Position;
+            light.position = camera.Transform.localPosition;
         }
 
         public override void Render(object sender, FrameEventArgs e)
