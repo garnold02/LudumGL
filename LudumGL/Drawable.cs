@@ -45,7 +45,12 @@ namespace LudumGL
         /// The texture of this object. Null means
         /// no texture.
         /// </summary>
-        public Texture texture;
+        public Texture Texture { get; set; }
+
+        /// <summary>
+        /// The color of this object.
+        /// </summary>
+        public Vector4 Albedo { get; set; } = new Vector4(1, 1, 1, 1);
 
         /// <summary>
         /// The transform of this object.
@@ -120,11 +125,14 @@ namespace LudumGL
             GL.VertexAttribPointer(2, 4, VertexAttribPointerType.Float, false, 0, 0);
 
             GL.UseProgram(program);
+
             SetMatrix4("translation", transform.TranslationMatrix);
             SetMatrix4("rotation", transform.RotationMatrix);
             SetMatrix4("scale", transform.ScaleMatrix);
             SetMatrix4("projection", (Matrix4.Invert(camera.Transform.TranslationMatrix) * camera.Transform.RotationMatrix) * camera.Projection);
+
             SetVector3("ambient", Game.AmbientLightColor);
+            SetVector4("albedo", Albedo);
             //Set light data
             for (int i = 0; i < Game.activeLights.Length; i++)
             {
@@ -140,10 +148,13 @@ namespace LudumGL
             }
 
             //Set texture
-            if (texture != null)
-                GL.BindTexture(TextureTarget.Texture2D, texture.glTexture);
+            if (Texture != null)
+                GL.BindTexture(TextureTarget.Texture2D, Texture.glTexture);
 
             GL.DrawElements(PrimitiveType.Triangles, mesh.vertices.Length, DrawElementsType.UnsignedInt, mesh.indices);
+
+            //Still unsure about leaving this in
+            uniforms.Clear();
         }
 
         #region UniformSetters
