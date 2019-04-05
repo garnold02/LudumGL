@@ -8,6 +8,14 @@ namespace LudumGL
     /// </summary>
     public class Camera
     {
+        #region Static
+        /// <summary>
+        /// Returns the origin camera. Its position is (0,0,0)
+        /// and is facing forward (-Z).
+        /// </summary>
+        public static Camera Default { get; } = new Camera();
+        #endregion
+
         /// <summary>
         /// The transform of this camera.
         /// </summary>
