@@ -12,6 +12,7 @@ namespace TestGame
         static Camera camera;
         static GameObject cube;
         static GameObject monkey;
+        static GameObject sphere;
 
         public override void Start()
         {
@@ -32,16 +33,22 @@ namespace TestGame
 
             cube = new GameObject
             {
-                drawable = Drawable.MakeDrawable(Mesh.Load("assets/mesh/cube.dae"), Shaders.Lit),
-                transform = new Transform() { localPosition = new Vector3(0, 0, -5) }
+                Drawable = Drawable.MakeDrawable(Mesh.Load("assets/mesh/cube.dae"), Shaders.Lit),
+                Transform = new Transform() { localPosition = new Vector3(0, 0, -5) }
             };
             monkey = new GameObject
             {
-                drawable = Drawable.MakeDrawable(Mesh.Load("assets/mesh/monkey.dae"), Shaders.Lit),
-                transform = new Transform() { localPosition = new Vector3(4, 0, 0), Parent=cube.transform }
+                Drawable = Drawable.MakeDrawable(Mesh.Load("assets/mesh/monkey.dae"), Shaders.Lit),
+                Transform = new Transform() { localPosition = new Vector3(0, 0, -5), Parent=cube.Transform},
+            };
+            sphere = new GameObject
+            {
+                Drawable = Drawable.MakeDrawable(Mesh.Load("assets/mesh/sphere.dae"), Shaders.Lit),
+                Transform = new Transform() { localPosition = new Vector3(0, -2, 0), localScale=new Vector3(1,1,1)*0.1f, Parent = monkey.Transform },
             };
             GameObject.Add(cube);
             GameObject.Add(monkey);
+            GameObject.Add(sphere);
 
         }
 
@@ -76,7 +83,8 @@ namespace TestGame
             camera.Transform.Rotate(-Input.MouseDelta.Y * Input.MouseSensitivity, -Input.MouseDelta.X * Input.MouseSensitivity, 0);
             light.position = camera.Transform.Position;
 
-            cube.transform.Rotate(1, 1, 1);
+            cube.Transform.Rotate(0, 1, 0);
+            monkey.Transform.Rotate(0, 0, 1);
         }
 
         public override void Render(object sender, FrameEventArgs e)
