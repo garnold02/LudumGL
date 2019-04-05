@@ -35,11 +35,6 @@ namespace LudumGL
         List<int> shaders;
         Dictionary<string, int> uniforms;
 
-        //Buffers
-        readonly int vertexBuffer;
-        readonly int normalBuffer;
-        readonly int uvBuffer;
-
         /// <summary>
         /// The mesh data that will be drawn
         /// using this object.
@@ -57,9 +52,6 @@ namespace LudumGL
             uniforms = new Dictionary<string, int>();
 
             program = GL.CreateProgram();
-            vertexBuffer = GL.GenBuffer();
-            normalBuffer = GL.GenBuffer();
-            uvBuffer = GL.GenBuffer();
         }
 
         /// <summary>
@@ -97,24 +89,7 @@ namespace LudumGL
                 GL.DetachShader(program, shader);
             }
             shaders.Clear();
-            Refresh();
-        }
-
-        /// <summary>
-        /// Refreshes mesh data.
-        /// </summary>
-        public void Refresh()
-        {
-            GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBuffer);
-            GL.BufferData(BufferTarget.ArrayBuffer, Vector4.SizeInBytes * mesh.vertices.Length, mesh.vertices, BufferUsageHint.StaticDraw);
-
-
-            GL.BindBuffer(BufferTarget.ArrayBuffer, normalBuffer);
-            GL.BufferData(BufferTarget.ArrayBuffer, Vector4.SizeInBytes * mesh.vertices.Length, mesh.normals, BufferUsageHint.StaticDraw);
-
-            GL.BindBuffer(BufferTarget.ArrayBuffer, uvBuffer);
-            GL.BufferData(BufferTarget.ArrayBuffer, Vector4.SizeInBytes * mesh.vertices.Length, mesh.uvs, BufferUsageHint.StaticDraw);
-
+            mesh.Refresh();
         }
 
         /// <summary>
@@ -126,15 +101,15 @@ namespace LudumGL
         {
             if (mesh == null) return;
 
-            GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBuffer);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, mesh.vertexBuffer);
             GL.EnableVertexAttribArray(0);
             GL.VertexAttribPointer(0, 4, VertexAttribPointerType.Float, false, 0, 0);
 
-            GL.BindBuffer(BufferTarget.ArrayBuffer, normalBuffer);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, mesh.normalBuffer);
             GL.EnableVertexAttribArray(1);
             GL.VertexAttribPointer(1, 4, VertexAttribPointerType.Float, false, 0, 0);
 
-            GL.BindBuffer(BufferTarget.ArrayBuffer, uvBuffer);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, mesh.uvBuffer);
             GL.EnableVertexAttribArray(2);
             GL.VertexAttribPointer(2, 4, VertexAttribPointerType.Float, false, 0, 0);
 
