@@ -1,5 +1,6 @@
 ﻿using System;
 using OpenTK;
+using OpenTK.Graphics.OpenGL;
 using a = Assimp;
 
 namespace LudumGL
@@ -60,5 +61,32 @@ namespace LudumGL
         /// The indices of this mesh.
         /// </summary>
         public int[] indices;
+
+        //Buffers
+        internal readonly int vertexBuffer;
+        internal readonly int normalBuffer;
+        internal readonly int uvBuffer;
+
+        public Mesh()
+        {
+            vertexBuffer = GL.GenBuffer();
+            normalBuffer = GL.GenBuffer();
+            uvBuffer = GL.GenBuffer();
+        }
+
+        /// <summary>
+        /// Reset buffers and fill them with current mesh data.
+        /// </summary>
+        public void Refresh()
+        {
+            GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBuffer);
+            GL.BufferData(BufferTarget.ArrayBuffer, Vector4.SizeInBytes * vertices.Length, vertices, BufferUsageHint.DynamicDraw);
+
+            GL.BindBuffer(BufferTarget.ArrayBuffer, normalBuffer);
+            GL.BufferData(BufferTarget.ArrayBuffer, Vector4.SizeInBytes * vertices.Length, normals, BufferUsageHint.DynamicDraw);
+
+            GL.BindBuffer(BufferTarget.ArrayBuffer, uvBuffer);
+            GL.BufferData(BufferTarget.ArrayBuffer, Vector4.SizeInBytes * vertices.Length, uvs, BufferUsageHint.DynamicDraw);
+        }
     }
 }
