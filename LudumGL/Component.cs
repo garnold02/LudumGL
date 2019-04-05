@@ -8,7 +8,7 @@ namespace LudumGL
     /// </summary>
     public abstract class Component
     {
-        bool internalEnabled;
+        bool internalEnabled = true;
 
         public bool Enabled
         {
@@ -31,7 +31,7 @@ namespace LudumGL
         /// Runs when the component is added to a
         /// GameObject.
         /// </summary>
-        internal virtual void Start()
+        public virtual void Start()
         {
 
         }
@@ -39,7 +39,7 @@ namespace LudumGL
         /// <summary>
         /// Runs every frame when this Component is enabled.
         /// </summary>
-        internal virtual void Update()
+        public virtual void Update()
         {
 
         }

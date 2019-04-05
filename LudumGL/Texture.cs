@@ -14,11 +14,11 @@ namespace LudumGL
         #region Static
         public static Texture LoadFromFile(string path)
         {
-
-            Bitmap bitmap = new Bitmap(path);
-            bitmap.RotateFlip(RotateFlipType.Rotate90FlipY);
             int glTex = GL.GenTexture();
             GL.BindTexture(TextureTarget.Texture2DArray, glTex);
+
+            Bitmap bitmap = new Bitmap(path);
+            bitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
 
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);

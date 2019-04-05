@@ -19,7 +19,7 @@ namespace TestGame
                 type=LightType.Point,
                 color = new Vector4(1, 1, 1, 1),
                 range = 30,
-                position = new Vector3(0, 0, 5),
+                position = new Vector3(0, 5, 0),
                 rotation = Quaternion.FromEulerAngles(0, 0, 0)
             };
             Game.activeLights[0] = light;
@@ -28,26 +28,18 @@ namespace TestGame
             Game.mainCamera = camera;
             Input.MouseSensitivity = 0.1f;
 
-            Mesh cubeMesh = Mesh.Load("assets/mesh/cube_uv.dae");
-            Texture cubeTex = Texture.LoadFromFile("assets/tex/test.png");
-            int length = 10;
-            for (int i = 0; i < length; i++)
+            Mesh sceneMesh = Mesh.Load("assets/mesh/scene.dae");
+            Mesh skyMesh = Mesh.Load("assets/mesh/sky.dae");
+            Texture sceneTex = Texture.LoadFromFile("assets/tex/scene.png");
+            //Texture skyTex = Texture.LoadFromFile("assets/tex/sky.png");
+
+            GameObject cube = new GameObject
             {
-                for (int j = 0; j < length; j++)
-                {
-                    for (int k = 0; k < length; k++)
-                    {
-                        GameObject cube = new GameObject
-                        {
-                            Drawable = Drawable.MakeDrawable(cubeMesh, Shaders.Lit),
-                            Transform = new Transform() { localPosition = new Vector3(i - length / 2, j - length / 2, k - length / 2) * 5 },
-                        };
-                        cube.Drawable.Texture = cubeTex;
-                        cube.Drawable.Albedo = new Vector4(i / (float)length, j / (float)length, k / (float)length, 1);
-                        GameObject.Add(cube);
-                    }
-                }
-            }
+                Drawable = Drawable.MakeDrawable(sceneMesh, Shaders.Lit),
+                Transform = new Transform() { localPosition = new Vector3(0, -2, 0), localScale=new Vector3(1,1,1)*10 },
+            };
+            cube.Drawable.Texture = sceneTex;
+            GameObject.Add(cube);
         }
 
         static float t;
@@ -79,7 +71,6 @@ namespace TestGame
                 camera.Transform.Rotate(0, 0, 2);
             }
             camera.Transform.Rotate(-Input.MouseDelta.Y * Input.MouseSensitivity, -Input.MouseDelta.X * Input.MouseSensitivity, 0);
-            light.position = camera.Transform.localPosition;
         }
 
         public override void Render(object sender, FrameEventArgs e)

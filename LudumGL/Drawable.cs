@@ -152,9 +152,6 @@ namespace LudumGL
                 GL.BindTexture(TextureTarget.Texture2D, Texture.glTexture);
 
             GL.DrawElements(PrimitiveType.Triangles, mesh.vertices.Length, DrawElementsType.UnsignedInt, mesh.indices);
-
-            //Still unsure about leaving this in
-            uniforms.Clear();
         }
 
         #region UniformSetters
