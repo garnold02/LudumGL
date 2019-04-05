@@ -27,14 +27,27 @@ namespace TestGame
             camera.Transform.localPosition = new Vector3(0, 0, 0);
             Game.mainCamera = camera;
             Input.MouseSensitivity = 0.1f;
-            GameObject monkey = new GameObject
+
+            Mesh cubeMesh = Mesh.Load("assets/mesh/cube_uv.dae");
+            Texture cubeTex = Texture.LoadFromFile("assets/tex/test.png");
+            int length = 10;
+            for (int i = 0; i < length; i++)
             {
-                Drawable = Drawable.MakeDrawable(Mesh.Load("assets/mesh/cube_uv.dae"), Shaders.Lit),
-                Transform = new Transform() { localPosition = new Vector3(0, 0, 0) },
-            };
-            monkey.Drawable.texture = Texture.LoadFromFile("assets/tex/test.png");
-            GameObject.Add(monkey);
-            monkey.Transform.Rotate(-90, 0, 0);
+                for (int j = 0; j < length; j++)
+                {
+                    for (int k = 0; k < length; k++)
+                    {
+                        GameObject cube = new GameObject
+                        {
+                            Drawable = Drawable.MakeDrawable(cubeMesh, Shaders.Lit),
+                            Transform = new Transform() { localPosition = new Vector3(i - length / 2, j - length / 2, k - length / 2) * 5 },
+                        };
+                        cube.Drawable.Texture = cubeTex;
+                        cube.Drawable.Albedo = new Vector4(i / (float)length, j / (float)length, k / (float)length, 1);
+                        GameObject.Add(cube);
+                    }
+                }
+            }
         }
 
         static float t;
