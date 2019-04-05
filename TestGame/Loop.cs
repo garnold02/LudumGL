@@ -10,9 +10,6 @@ namespace TestGame
     {
         static Light light;
         static Camera camera;
-        static GameObject cube;
-        static GameObject monkey;
-        static GameObject sphere;
 
         public override void Start()
         {
@@ -31,12 +28,24 @@ namespace TestGame
             Game.mainCamera = camera;
             Input.MouseSensitivity = 0.1f;
 
-            cube = new GameObject
+            Mesh mesh = Mesh.Load("assets/mesh/sphere.dae");
+            int length = 4;
+            for (int i = 0; i < length; i++)
             {
-                Drawable = Drawable.MakeDrawable(Mesh.Load("assets/mesh/cube.dae"), Shaders.Lit),
-                Transform = new Transform() { localPosition = new Vector3(0, 0, -5) }
-            };
-            monkey = new GameObject
+                for (int j = 0; j < length; j++)
+                {
+                    for (int k = 0; k < length; k++)
+                    {
+                        GameObject cube = new GameObject
+                        {
+                            Drawable = Drawable.MakeDrawable(mesh, Shaders.Lit),
+                            Transform = new Transform() { localPosition = new Vector3(i-length/2, j-length/2, k-length/2)*5 }
+                        };
+                        GameObject.Add(cube);
+                    }
+                }
+            }
+            /*monkey = new GameObject
             {
                 Drawable = Drawable.MakeDrawable(Mesh.Load("assets/mesh/monkey.dae"), Shaders.Lit),
                 Transform = new Transform() { localPosition = new Vector3(0, 0, -5), Parent=cube.Transform},
@@ -48,7 +57,7 @@ namespace TestGame
             };
             GameObject.Add(cube);
             GameObject.Add(monkey);
-            GameObject.Add(sphere);
+            GameObject.Add(sphere);*/
 
         }
 
@@ -82,9 +91,6 @@ namespace TestGame
             }
             camera.Transform.Rotate(-Input.MouseDelta.Y * Input.MouseSensitivity, -Input.MouseDelta.X * Input.MouseSensitivity, 0);
             light.position = camera.Transform.Position;
-
-            cube.Transform.Rotate(0, 1, 0);
-            monkey.Transform.Rotate(0, 0, 1);
         }
 
         public override void Render(object sender, FrameEventArgs e)
