@@ -17,7 +17,7 @@ namespace LudumGL
         {
             foreach (GameObject gameObject in gameObjects)
             {
-                gameObject.drawable.transform = gameObject.transform;
+                gameObject.Drawable.transform = gameObject.Transform;
                 gameObject.UpdateComponents();
             }
 
@@ -34,9 +34,11 @@ namespace LudumGL
         {
             foreach (GameObject gameObject in gameObjects)
             {
-                if(gameObject.drawable!=null)
+                if(gameObject.Drawable!=null)
                 {
-                    gameObject.drawable.Render(Game.mainCamera);
+                    Camera camera = Game.mainCamera;
+                    if (gameObject.CameraOverride != null) camera = gameObject.CameraOverride;
+                    gameObject.Drawable.Render(camera);
                 }
             }
         }
@@ -62,6 +64,10 @@ namespace LudumGL
         bool internalEnabled;
         readonly List<Component> components;
 
+        /// <summary>
+        /// Determines whether the GameObject is
+        /// enabled or not.
+        /// </summary>
         public bool Enabled
         {
             get => internalEnabled;
@@ -88,18 +94,25 @@ namespace LudumGL
         /// <summary>
         /// The transform of this GameObject.
         /// </summary>
-        public Transform transform=Transform.Identity;
+        public Transform Transform { get; set; } = Transform.Identity;
 
         /// <summary>
         /// The drawable of this GameObject. Contains the shaders, texture, and mesh
         /// neccessary for drawing.
         /// </summary>
-        public Drawable drawable;
+        public Drawable Drawable { get; set; }
+
+        /// <summary>
+        /// If this property is set, it will override
+        /// the default camera and the GameObject will be
+        /// rendered from this one instead.
+        /// </summary>
+        public Camera CameraOverride { get; set; }
 
         public GameObject()
         {
             components = new List<Component>();
-            transform = Transform.Identity;
+            Transform = Transform.Identity;
         }
 
         /// <summary>
@@ -114,6 +127,9 @@ namespace LudumGL
             component.Start();
         }
 
+        /// <summary>
+        /// Updates all components of this GameObject.
+        /// </summary>
         internal void UpdateComponents()
         {
             foreach (Component component in components)
