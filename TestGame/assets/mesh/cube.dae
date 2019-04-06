@@ -5,8 +5,8 @@
       <author>Blender User</author>
       <authoring_tool>Blender 2.80.42 commit date:2019-01-28, commit time:16:46, hash:cad1016c20b5</authoring_tool>
     </contributor>
-    <created>2019-04-02T21:44:37</created>
-    <modified>2019-04-02T21:44:37</modified>
+    <created>2019-04-06T20:44:48</created>
+    <modified>2019-04-06T20:44:48</modified>
     <unit name="meter" meter="1"/>
     <up_axis>Z_UP</up_axis>
   </asset>
@@ -15,7 +15,7 @@
     <geometry id="Cube_001-mesh" name="Cube.001">
       <mesh>
         <source id="Cube_001-mesh-positions">
-          <float_array id="Cube_001-mesh-positions-array" count="24">-1 -1 -1 -1 -1 1 -1 1 -1 -1 1 1 1 -1 -1 1 -1 1 1 1 -1 1 1 1</float_array>
+          <float_array id="Cube_001-mesh-positions-array" count="24">-0.5 -0.5 -0.5 -0.5 -0.5 0.5 -0.5 0.5 -0.5 -0.5 0.5 0.5 0.5 -0.5 -0.5 0.5 -0.5 0.5 0.5 0.5 -0.5 0.5 0.5 0.5</float_array>
           <technique_common>
             <accessor source="#Cube_001-mesh-positions-array" count="8" stride="3">
               <param name="X" type="float"/>
@@ -35,7 +35,7 @@
           </technique_common>
         </source>
         <source id="Cube_001-mesh-map-0">
-          <float_array id="Cube_001-mesh-map-0-array" count="72">0.625 0 0.375 0.25 0.375 0 0.625 0.25 0.375 0.5 0.375 0.25 0.625 0.5 0.375 0.75 0.375 0.5 0.625 0.75 0.375 1 0.375 0.75 0.375 0.5 0.125 0.75 0.125 0.5 0.875 0.5 0.625 0.75 0.625 0.5 0.625 0 0.625 0.25 0.375 0.25 0.625 0.25 0.625 0.5 0.375 0.5 0.625 0.5 0.625 0.75 0.375 0.75 0.625 0.75 0.625 1 0.375 1 0.375 0.5 0.375 0.75 0.125 0.75 0.875 0.5 0.875 0.75 0.625 0.75</float_array>
+          <float_array id="Cube_001-mesh-map-0-array" count="72">0.9998999 0.9998999 1.00069e-4 9.998e-5 0.9999001 1.00099e-4 0.9998999 0.9998999 1.00069e-4 9.998e-5 0.9999001 1.00099e-4 1.00069e-4 9.998e-5 0.9998999 0.9999001 9.998e-5 0.9998998 1.00069e-4 9.998e-5 0.9998999 0.9999001 9.998e-5 0.9998998 0.9998999 9.998e-5 1.0004e-4 0.9999001 9.998e-5 1.00099e-4 0.9998997 9.998e-5 1.00099e-4 0.9999001 9.998e-5 1.00338e-4 0.9998999 0.9998999 9.998e-5 0.9998998 1.00069e-4 9.998e-5 0.9998999 0.9998999 9.998e-5 0.9998998 1.00069e-4 9.998e-5 1.00069e-4 9.998e-5 0.9998999 1.00129e-4 0.9998999 0.9999001 1.00069e-4 9.998e-5 0.9998999 1.00129e-4 0.9998999 0.9999001 0.9998999 9.998e-5 0.9998999 0.9999001 1.0004e-4 0.9999001 0.9998997 9.998e-5 0.9998998 0.9998999 1.00099e-4 0.9999001</float_array>
           <technique_common>
             <accessor source="#Cube_001-mesh-map-0-array" count="36" stride="2">
               <param name="S" type="float"/>
