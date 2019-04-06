@@ -133,6 +133,15 @@ namespace LudumGL
 
             SetVector3("ambient", Game.AmbientLightColor);
             SetVector4("albedo", Albedo);
+
+            if(Texture!=null)
+            {
+                GL.BindTexture(TextureTarget.Texture2D, Texture.glTexture);
+                GL.ActiveTexture(TextureUnit.Texture0);
+                SetFloat("tex0", 0);
+                SetFloat("useTex", 1);
+            }
+
             //Set light data
             for (int i = 0; i < Game.activeLights.Length; i++)
             {
@@ -147,16 +156,12 @@ namespace LudumGL
                 SetFloat(name + "range", light.range);
             }
 
-            //Set texture
-            if (Texture != null)
-                GL.BindTexture(TextureTarget.Texture2D, Texture.glTexture);
-
             GL.DrawElements(PrimitiveType.Triangles, mesh.vertices.Length, DrawElementsType.UnsignedInt, mesh.indices);
         }
 
         #region UniformSetters
         /// <summary>
-        /// Pass a float to the shader as an uniform property.
+        /// Pass a float to the shader as a uniform property.
         /// </summary>
         /// <param name="name">Property name</param>
         /// <param name="value"></param>
@@ -173,7 +178,7 @@ namespace LudumGL
         }
 
         /// <summary>
-        /// Pass a 2D vector to the shader as an uniform property.
+        /// Pass a 2D vector to the shader as a uniform property.
         /// </summary>
         /// <param name="name">Property name</param>
         /// <param name="value"></param>
@@ -189,7 +194,7 @@ namespace LudumGL
         }
 
         /// <summary>
-        /// Pass a 3D vector to the shader as an uniform property.
+        /// Pass a 3D vector to the shader as a uniform property.
         /// </summary>
         /// <param name="name">Property name</param>
         /// <param name="value"></param>
@@ -205,7 +210,7 @@ namespace LudumGL
         }
 
         /// <summary>
-        /// Pass a 4D vector to the shader as an uniform property.
+        /// Pass a 4D vector to the shader as a uniform property.
         /// </summary>
         /// <param name="name">Property name</param>
         /// <param name="value"></param>
@@ -221,7 +226,7 @@ namespace LudumGL
         }
 
         /// <summary>
-        /// Pass a 4x4 Matrix to the shader as an uniform property.
+        /// Pass a 4x4 Matrix to the shader as a uniform property.
         /// </summary>
         /// <param name="name">Property name</param>
         /// <param name="value"></param>

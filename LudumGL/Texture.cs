@@ -12,31 +12,20 @@ namespace LudumGL
     public class Texture
     {
         #region Static
-        public static Texture LoadFromFile(string path)
+        public static Texture LoadFromFile(string path, TextureFilteringMode filteringMode=TextureFilteringMode.Linear)
         {
-            int glTex = GL.GenTexture();
-            GL.BindTexture(TextureTarget.Texture2DArray, glTex);
-
+            Texture texture = new Texture();
             Bitmap bitmap = new Bitmap(path);
             bitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
-
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
-
-            BitmapData data = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height),
-            ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, data.Width, data.Height, 0,
-            OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
-
+            BitmapData data = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             bitmap.UnlockBits(data);
 
-            Texture texture = new Texture()
-            {
-                glTexture = glTex,
-                Width = bitmap.Width,
-                Height = bitmap.Height
-            };
+            texture.glTexture = GL.GenTexture();
+            GL.BindTexture(TextureTarget.Texture2D, texture.glTexture);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)filteringMode);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)filteringMode);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bitmap.Width, bitmap.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
+            GL.BindTexture(TextureTarget.Texture2D, 0);
             return texture;
         }
         #endregion
@@ -48,5 +37,11 @@ namespace LudumGL
 
         public int Width { get; private set; }
         public int Height { get; private set; }
+    }
+
+    public enum TextureFilteringMode
+    {
+        Nearest = 9728,
+        Linear = 9729,
     }
 }

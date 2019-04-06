@@ -77,7 +77,8 @@ uniform Light lights[10];
 uniform vec3 ambient;
 
 uniform vec4 albedo;
-uniform sampler2D tex;
+uniform sampler2D tex0;
+uniform float useTex;
 
 void main() {
     vec4 combinedLightColor=vec4(0,0,0,1);
@@ -92,13 +93,18 @@ void main() {
         float lightDistance=length(lightConnection);
 
         float rangeMod=1-clamp(lightDistance/light.range,0,1);
-        if(light.type==1) rangeMod=1;
+        if(light.type==1) {
+            rangeMod=1;
+            lightDirection=(light.rotation*vec4(0,0,1,0)).xyz;
+        }
         float diffuse=clamp(dot(lightDirection,normalRot),0,1);
 
         vec4 lightColor=light.color*diffuse*rangeMod*light.color.w;
         combinedLightColor+=lightColor;
     }
-    FragColor=texture(tex, uv.xy) * albedo * vec4(ambient + combinedLightColor.xyz, 1.0);
+    vec4 textureCol=texture(tex0, uv.xy);
+    if(useTex==0) textureCol=vec4(1,1,1,1);
+    FragColor=textureCol * albedo * vec4(ambient + combinedLightColor.xyz, 1.0);
 }
 
         ";
@@ -113,10 +119,11 @@ in vec4 localPos;
 in vec4 normal;
 in vec4 uv;
 
-uniform vec4 color;
+uniform vec4 albedo;
+uniform sampler2D tex0;
 
 void main() {
-    FragColor=color;
+    FragColor=texture(tex0, uv.xy) * albedo;
 }
 
         ";
