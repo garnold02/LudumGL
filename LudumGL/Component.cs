@@ -28,7 +28,7 @@ namespace LudumGL
         public GameObject Parent { get; internal set; }
 
         /// <summary>
-        /// Runs when the component is added to a
+        /// Runs when the component is added to a GameObject.
         /// GameObject.
         /// </summary>
         public virtual void Start()

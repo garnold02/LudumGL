@@ -128,6 +128,25 @@ namespace LudumGL
         }
 
         /// <summary>
+        /// Finds a component.
+        /// </summary>
+        /// <typeparam name="T">The type of the component</typeparam>
+        /// <param name="num">In case of multiple components, use this to
+        /// determine which component to return</param>
+        /// <returns></returns>
+        public T GetComponent<T>(int num=0)
+        {
+            foreach (Component component in components)
+            {
+                object comp = component;
+                if (comp is T)
+                    return (T)comp;
+            }
+
+            return default(T);
+        }
+
+        /// <summary>
         /// Updates all components of this GameObject.
         /// </summary>
         internal void UpdateComponents()

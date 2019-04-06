@@ -64,6 +64,13 @@ namespace LudumGL
                 if (Parent == null) return LocalTranslationMatrix;
                 return RotationMatrix * ScaleMatrix * TranslationMatrix;
             }
+            set
+            {
+                if (Parent != null) return;
+                localPosition = value.ExtractTranslation();
+                localRotation = value.ExtractRotation();
+                localScale = value.ExtractScale();
+            }
         }
 
         public Vector3 Position { get => TranslationMatrix.ExtractTranslation(); }

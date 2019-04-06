@@ -1,5 +1,6 @@
 ﻿using System;
 using OpenTK;
+using OpenTK.Input;
 using OpenTK.Graphics.OpenGL;
 
 namespace LudumGL
@@ -41,6 +42,11 @@ namespace LudumGL
         /// </summary>
         public static Vector3 AmbientLightColor { get; set; } = new Vector3(0.1f, 0.1f, 0.1f);
 
+        /// <summary>
+        /// Gets or sets the mouse lock status.
+        /// </summary>
+        public static bool MouseLocked { get; set; }
+
         internal static GameWindow window;
 
         public static void Start()
@@ -49,6 +55,9 @@ namespace LudumGL
             {
                 Title = initialSettigns.Title
             };
+            if(initialSettigns.Fullscreen)
+                window.WindowState = WindowState.Fullscreen;
+
             window.UpdateFrame += PreUpdate;
             window.UpdateFrame += gameLoop.Update;
             window.UpdateFrame += PostUpdate;
@@ -65,21 +74,37 @@ namespace LudumGL
             window.Run(60);
         }
 
+        public static void Exit()
+        {
+            window.Exit();
+        }
+
         static void Initialize()
         {
             GL.Enable(EnableCap.DepthTest);
+            GL.Enable(EnableCap.CullFace);
             activeLights = new Light[10];
+
+            Physics.Initialize();
         }
 
         static void PreUpdate(object sender, FrameEventArgs e)
         {
             Input.Update();
+            Physics.Update(4f / 100f);
             GameObject.Update();
+            if(MouseLocked)
+            {
+                Mouse.SetPosition(0, 0);
+                window.CursorVisible = false;
+            }else
+            {
+                window.CursorVisible = true;
+            }
         }
 
         static void PostUpdate(object sender, FrameEventArgs e)
         {
-
         }
 
         static void PreRender(object sender, FrameEventArgs e)
@@ -118,6 +143,7 @@ namespace LudumGL
             }
         }
 
+        public bool Fullscreen { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
         public string Title { get; set; }
