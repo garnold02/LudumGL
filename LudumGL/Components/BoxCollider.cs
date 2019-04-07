@@ -10,20 +10,24 @@ namespace LudumGL.Components
     /// </summary>
     public class BoxCollider : Collider
     {
-        Vector3 internalSize = Vector3.One;
-        public Vector3 Size
-        {
-            get => internalSize;
-            set
-            {
-                internalSize = value;
-                shape = new BoxShape(value.X, value.Y, value.Z);
-            }
-        }
+        public Vector3 Size { get; set; } = Vector3.One;
 
         public BoxCollider() : base()
         {
             shape = new BoxShape(Size.X, Size.Y, Size.Z);
+        }
+
+        public override void Update()
+        {
+            BoxShape box = (BoxShape)shape;
+            Vector3 boxSize = new Vector3(box.Width, box.Height, box.Length);
+            if(boxSize!=Size*Parent.Transform.localScale)
+            {
+                box.Width = Size.X * Parent.Transform.localScale.X;
+                box.Height = Size.Y * Parent.Transform.localScale.Y;
+                box.Length = Size.Z * Parent.Transform.localScale.Z;
+            }
+            base.Update();
         }
     }
 }

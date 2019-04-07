@@ -12,5 +12,16 @@ namespace LudumGL.Components
         {
             shape = new SphereShape(Radius);
         }
+
+        public override void Update()
+        {
+            SphereShape sphere = (SphereShape)shape;
+            if (sphere.Radius * Parent.Transform.localScale.Y != Radius * Parent.Transform.localScale.Y)
+            {
+                sphere.Radius = Radius * Parent.Transform.localPosition.Y;
+            }
+            base.Update();
+
+        }
     }
 }
