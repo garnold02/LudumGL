@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using LudumGL;
 using LudumGL.Components;
+using LudumGL.UserInterface;
 using OpenTK;
 using OpenTK.Input;
 
@@ -50,7 +51,7 @@ namespace TestGame
 
                 GameObject fallingCube = new GameObject()
                 {
-                    Drawable = RenderMesh.MakeRenderMesh(cubeMesh, Shaders.Lit),
+                    Drawable = DrawableMesh.Create(cubeMesh, Shaders.Lit),
                     Transform = new Transform() { localPosition = new Vector3(0, 5+i*2, 0) }
                 };
                 fallingCube.Transform.Rotate(i*10, i*10, i*10);
@@ -66,7 +67,7 @@ namespace TestGame
 
             GameObject floor = new GameObject()
             {
-                Drawable = RenderMesh.MakeRenderMesh(Mesh.Load("assets/mesh/cube.dae"), Shaders.Lit),
+                Drawable = DrawableMesh.Create(Mesh.Load("assets/mesh/cube.dae"), Shaders.Lit),
                 Transform = new Transform() { localPosition = new Vector3(0, 0, 0), localScale=new Vector3(100,1,100) }
             };
             floor.Drawable.Material.Texture = floorTexture;
@@ -79,7 +80,7 @@ namespace TestGame
 
             GameObject sky = new GameObject()
             {
-                Drawable = RenderMesh.MakeRenderMesh(Mesh.Load("assets/mesh/sky.dae"), Shaders.Unlit),
+                Drawable = DrawableMesh.Create(Mesh.Load("assets/mesh/sky.dae"), Shaders.Unlit),
                 Transform = new Transform() { localScale = Vector3.One, localPosition=new Vector3(0,0,0) },
                 CameraOverride=skyCam
             };
@@ -90,7 +91,7 @@ namespace TestGame
 
             GameObject crosshair = new GameObject()
             {
-                Drawable = RenderMesh.MakeRenderMesh(cubeMesh, Shaders.Unlit),
+                Drawable = DrawableMesh.Create(cubeMesh, Shaders.Unlit),
                 Transform=new Transform { localPosition=new Vector3(0,0,-1), localScale=Vector3.One*0.01f}
             };
             crosshair.CameraOverride = new Camera() { Depth = 1 };
@@ -103,19 +104,19 @@ namespace TestGame
             if (Input.GetKeyDown(Key.Escape)) Game.Exit();
             if (Input.GetKey(Key.W))
             {
-                camera.Transform.localPosition += Game.mainCamera.Transform.Forward * 0.1f;
+                camera.Transform.localPosition += Game.mainCamera.Transform.Forward * 0.5f;
             }
             if (Input.GetKey(Key.S))
             {
-                camera.Transform.localPosition -= Game.mainCamera.Transform.Forward * 0.1f;
+                camera.Transform.localPosition -= Game.mainCamera.Transform.Forward * 0.5f;
             }
             if (Input.GetKey(Key.A))
             {
-                camera.Transform.localPosition -= Game.mainCamera.Transform.Right * 0.1f;
+                camera.Transform.localPosition -= Game.mainCamera.Transform.Right * 0.5f;
             }
             if (Input.GetKey(Key.D))
             {
-                camera.Transform.localPosition += Game.mainCamera.Transform.Right * 0.1f;
+                camera.Transform.localPosition += Game.mainCamera.Transform.Right * 0.5f;
             }
             if (Input.GetKey(Key.Q))
             {

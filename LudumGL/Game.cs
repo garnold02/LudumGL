@@ -3,6 +3,8 @@ using OpenTK;
 using OpenTK.Input;
 using OpenTK.Graphics.OpenGL;
 
+using LudumGL.UserInterface;
+
 namespace LudumGL
 {
     /// <summary>
@@ -86,12 +88,15 @@ namespace LudumGL
             activeLights = new Light[10];
 
             Physics.Initialize();
+            Mesh.InitializeDefaultMeshes();
         }
 
         static void PreUpdate(object sender, FrameEventArgs e)
         {
             Input.Update();
             GameObject.Update();
+            UI.Update();
+            
             if(MouseLocked)
             {
                 Mouse.SetPosition(0, 0);
@@ -110,6 +115,7 @@ namespace LudumGL
         static void PreRender(object sender, FrameEventArgs e)
         {
             GameObject.Render();
+            UI.Render();
         }
 
         static void PostRender(object sender, FrameEventArgs e)

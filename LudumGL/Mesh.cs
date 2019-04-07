@@ -11,6 +11,21 @@ namespace LudumGL
     /// </summary>
     public class Mesh
     {
+        #region Static
+        internal static void InitializeDefaultMeshes()
+        {
+            Rectangle = new Mesh()
+            {
+                vertices = new Vector4[6] { new Vector4(-0.5f, -0.5f, 0, 1), new Vector4(0.5f, -0.5f, 0, 1), new Vector4(0.5f, 0.5f, 0, 1), new Vector4(-0.5f, -0.5f, 0, 1), new Vector4(0.5f, 0.5f, 0, 1), new Vector4(0-0.5f, 0.5f, 0, 1) },
+                normals = new Vector4[6] { new Vector4(0, 0, 1, 0), new Vector4(0, 0, 1, 0), new Vector4(0, 0, 1, 0), new Vector4(0, 0, 1, 0), new Vector4(0, 0, 1, 0), new Vector4(0, 0, 1, 0) },
+                uvs = new Vector4[6] { new Vector4(0, 0, 0, 0), new Vector4(1, 0, 0, 0), new Vector4(1, 1, 0, 0), new Vector4(0, 0, 0, 0), new Vector4(1, 1, 0, 0), new Vector4(0, 1, 0, 0) },
+                indices = new int[6] { 0, 1, 2, 3, 4, 5}
+            };
+            Rectangle.Refresh();
+        }
+
+        public static Mesh Rectangle { get; private set; }
+
         /// <summary>
         /// Import a mesh from a model file.
         /// </summary>
@@ -41,6 +56,7 @@ namespace LudumGL
 
             return mesh;
         }
+        #endregion
 
         /// <summary>
         /// The vertices of this mesh.

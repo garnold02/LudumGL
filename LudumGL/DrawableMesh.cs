@@ -11,12 +11,12 @@ namespace LudumGL
     /// Represents an object that can be drawn using
     /// LudumGL's renderer.
     /// </summary>
-    public class RenderMesh : Drawable
+    public class DrawableMesh : Drawable
     {
         #region Static
-        public static RenderMesh MakeRenderMesh(Mesh mesh, params Shader[] shaders)
+        public static DrawableMesh Create(Mesh mesh, params Shader[] shaders)
         {
-            RenderMesh drawable = new RenderMesh
+            DrawableMesh drawable = new DrawableMesh
             {
                 mesh = mesh
             };
@@ -39,7 +39,7 @@ namespace LudumGL
         /// </summary>
         public Mesh mesh;
 
-        public RenderMesh() : base()
+        public DrawableMesh() : base()
         {
 
         }
@@ -81,13 +81,16 @@ namespace LudumGL
             {
                 Matrix4 cameraTranslation = Matrix4.Identity;
                 Matrix4 cameraRotation = Matrix4.Identity;
-                if (((int)CameraIgnore & 0b100) == 0b100)
+                Matrix4 cameraProjection = Matrix4.Identity;
+                if (((int)CameraIgnore & 0b1000) == 0b0000)
                     cameraTranslation = camera.Transform.TranslationMatrix;
 
-                if (((int)CameraIgnore & 0b010) == 0b010)
+                if (((int)CameraIgnore & 0b0100) == 0b0000)
                     cameraRotation = camera.Transform.RotationMatrix;
+                if (((int)CameraIgnore & 0b0001) == 0b0000)
+                    cameraProjection = camera.Projection;
 
-                SetMatrix4("projection", (Matrix4.Invert(cameraTranslation) * cameraRotation) * camera.Projection);
+                SetMatrix4("projection", (Matrix4.Invert(cameraTranslation) * cameraRotation) * cameraProjection);
             }
 
             SetVector3("ambient", Game.AmbientLightColor);

@@ -84,7 +84,7 @@
     <Compile Include="Components\SphereCollider.cs" />
     <Compile Include="Drawable.cs" />
     <Compile Include="Material.cs" />
-    <Compile Include="RenderMesh.cs" />
+    <Compile Include="DrawableMesh.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="GameLoop.cs" />
     <Compile Include="GameObject.cs" />
@@ -99,6 +99,9 @@
     <Compile Include="Shaders.cs" />
     <Compile Include="Texture.cs" />
     <Compile Include="Transform.cs" />
+    <Compile Include="UserInterface\Panel.cs" />
+    <Compile Include="UserInterface\UI.cs" />
+    <Compile Include="UserInterface\UIElement.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="config\OpenTK.dll.config" />

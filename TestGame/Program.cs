@@ -11,7 +11,7 @@ namespace TestGame
         {
             gameLoop = new Loop();
             Game.gameLoop = gameLoop;
-            Game.initialSettigns.Fullscreen = true;
+            //Game.initialSettigns.Fullscreen = true;
             Game.Start();
         }
     }

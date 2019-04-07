@@ -162,9 +162,10 @@ namespace LudumGL
     /// </summary>
     public enum MatrixIgnoreMode
     {
-        None = 0b111,
-        Translation = 0b011,
-        Rotation = 0b101,
-        Scale = 0b110
+        None = 0b0000,
+        Translation = 0b1000,
+        Rotation = 0b0100,
+        Scale = 0b0010,
+        Projection = 0b0001
     }
 }

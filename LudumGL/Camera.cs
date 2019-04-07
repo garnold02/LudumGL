@@ -14,6 +14,12 @@ namespace LudumGL
         /// and is facing forward (-Z).
         /// </summary>
         public static Camera Default { get; } = new Camera();
+
+        /// <summary>
+        /// Returns the origin camera with the highest possible depth.
+        /// Use this for drawing on the user interface.
+        /// </summary>
+        public static Camera UI { get; } = new Camera() { Depth = int.MaxValue };
         #endregion
 
         /// <summary>
