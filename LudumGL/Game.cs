@@ -91,7 +91,6 @@ namespace LudumGL
         static void PreUpdate(object sender, FrameEventArgs e)
         {
             Input.Update();
-            Physics.Update(4f / 100f);
             GameObject.Update();
             if(MouseLocked)
             {
@@ -105,6 +104,7 @@ namespace LudumGL
 
         static void PostUpdate(object sender, FrameEventArgs e)
         {
+            Physics.Update(2f / 100f);
         }
 
         static void PreRender(object sender, FrameEventArgs e)
