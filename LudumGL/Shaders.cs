@@ -78,7 +78,8 @@ uniform vec3 ambient;
 
 uniform vec4 albedo;
 uniform sampler2D tex0;
-uniform float useTex;
+uniform vec2 tiling;
+uniform bool useTex;
 
 void main() {
     vec4 combinedLightColor=vec4(0,0,0,1);
@@ -102,8 +103,8 @@ void main() {
         vec4 lightColor=light.color*diffuse*rangeMod*light.color.w;
         combinedLightColor+=lightColor;
     }
-    vec4 textureCol=texture(tex0, uv.xy);
-    if(useTex==0) textureCol=vec4(1,1,1,1);
+    vec4 textureCol=texture(tex0, uv.xy*tiling);
+    if(!useTex) textureCol=vec4(1,1,1,1);
     FragColor=textureCol * albedo * vec4(ambient + combinedLightColor.xyz, 1.0);
 }
 
@@ -121,9 +122,13 @@ in vec4 uv;
 
 uniform vec4 albedo;
 uniform sampler2D tex0;
+uniform vec2 tiling;
+uniform bool useTex;
 
 void main() {
-    FragColor=texture(tex0, uv.xy) * albedo;
+    vec4 textureCol=texture(tex0, uv.xy*tiling);
+    if(!useTex) textureCol=vec4(1,1,1,1);
+    FragColor=textureCol * albedo;
 }
 
         ";

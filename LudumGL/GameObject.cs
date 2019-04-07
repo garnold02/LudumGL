@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using OpenTK.Graphics.OpenGL;
 
 namespace LudumGL
 {
@@ -17,7 +18,7 @@ namespace LudumGL
         {
             foreach (GameObject gameObject in gameObjects)
             {
-                gameObject.Drawable.transform = gameObject.Transform;
+                gameObject.Drawable.Transform = gameObject.Transform;
                 gameObject.UpdateComponents();
             }
 
@@ -26,21 +27,35 @@ namespace LudumGL
             {
                 gameObjects.Remove(gameObject);
             }
+            if (gameObjectsAdd.Count > 0 || gameObjectsRemove.Count > 0)
+                SortByDepth();
 
             gameObjectsAdd.Clear();
             gameObjectsRemove.Clear();
         }
+
         internal static void Render()
         {
+            int depth = int.MinValue;
             foreach (GameObject gameObject in gameObjects)
             {
                 if(gameObject.Drawable!=null)
                 {
-                    Camera camera = Game.mainCamera;
-                    if (gameObject.CameraOverride != null) camera = gameObject.CameraOverride;
+                    if(depth!=gameObject.CameraOverride.Depth)
+                    {
+                        GL.Clear(ClearBufferMask.DepthBufferBit);
+                    }
+                    Camera camera = gameObject.CameraOverride;
                     gameObject.Drawable.Render(camera);
                 }
+
+                depth = gameObject.CameraOverride.Depth;
             }
+        }
+
+        internal static void SortByDepth()
+        {
+            gameObjects.Sort((a, b) => { return a.CameraOverride.Depth.CompareTo(b.CameraOverride.Depth); });
         }
         /// <summary>
         /// Adds a GameObject to the system.
@@ -107,7 +122,7 @@ namespace LudumGL
         /// the default camera and the GameObject will be
         /// rendered from this one instead.
         /// </summary>
-        public Camera CameraOverride { get; set; }
+        public Camera CameraOverride { get; set; } = Game.mainCamera;
 
         public GameObject()
         {

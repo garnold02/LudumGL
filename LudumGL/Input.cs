@@ -10,6 +10,7 @@ namespace LudumGL
     public static class Input
     {
         static readonly byte[] currentPressedKeys = new byte[Enum.GetNames(typeof(Key)).Length];
+        static MouseState mouseState;
 
         /// <summary>
         /// Relative mouse movement.
@@ -17,6 +18,9 @@ namespace LudumGL
         public static Vector2 MouseDelta { get; private set; }
         private static Vector2 mousePositionLast;
 
+        /// <summary>
+        /// Gets or sets the sensitivity of the mouse.
+        /// </summary>
         public static float MouseSensitivity { get; set; } = 0.1f;
 
         /// <summary>
@@ -28,9 +32,9 @@ namespace LudumGL
             {
                 if (currentPressedKeys[i] == 2) currentPressedKeys[i] = 1;
             }
-            MouseState mouseState = Mouse.GetState();
+            mouseState = Mouse.GetState();
             Vector2 currentMousePosition = new Vector2(mouseState.X, mouseState.Y);
-            MouseDelta = mousePositionLast - currentMousePosition;
+            MouseDelta = (mousePositionLast - currentMousePosition) * MouseSensitivity;
             mousePositionLast = currentMousePosition;
 
             if (!Game.window.Focused) MouseDelta = new Vector2(0, 0);
@@ -50,11 +54,13 @@ namespace LudumGL
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
+
         public static bool GetKey(Key key)
         {
             if (!Game.window.Focused) return false;
             return currentPressedKeys[(int)key] != 0;
         }
+
         /// <summary>
         /// Returns true if the requested key is pressed on this frame.
         /// </summary>
@@ -69,6 +75,27 @@ namespace LudumGL
                 return true;
             }
             return false;
+        }
+
+        /// <summary>
+        /// Returns true if the requested mouse button is pressed.
+        /// </summary>
+        /// <param name="button"></param>
+        /// <returns></returns>
+        public static bool GetButton(MouseButton button)
+        {
+            return mouseState.IsButtonDown(button);
+        }
+
+        /// <summary>
+        /// Returns true if the requested mouse button is pressed on this frame.
+        /// </summary>
+        /// <param name="button"></param>
+        /// <returns></returns>
+        public static bool GetButtonDown(MouseButton button)
+        {
+            MouseState currentState = Mouse.GetState();
+            return (currentState.IsButtonDown(button) != mouseState.IsButtonDown(button) && currentState.IsButtonDown(button));
         }
     }
 }

@@ -74,7 +74,7 @@ namespace LudumGL
         }
 
         public Vector3 Position { get => TranslationMatrix.ExtractTranslation(); }
-        public Quaternion Rotation { get => localRotation * Parent.Rotation; }
+        public Quaternion Rotation { get { if (Parent == null) return localRotation; else return localRotation * Parent.Rotation; } }
         public Vector3 Scale { get => ScaleMatrix.ExtractScale(); }
 
 
