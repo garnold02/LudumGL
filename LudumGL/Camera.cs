@@ -36,9 +36,19 @@ namespace LudumGL
         /// </summary>
         public float FarClip { get; set; } = 100f;
 
+
+        int internalDepth = 0;
+        /// <summary>
+        /// Determines when objects seen by this camera will be drawn.
+        /// Higher means later.
+        /// </summary>
+        public int Depth { get => internalDepth; set { internalDepth = value; GameObject.SortByDepth(); } }
+
         /// <summary>
         /// Returns the projection matrix of this camera.
         /// </summary>
         public Matrix4 Projection { get => Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(FieldOfView), Game.AspectRatio, NearClip, FarClip); }
+
+        public Ray ForwardRay { get => new Ray() { Origin = Transform.Position, Direction = Transform.Forward }; }
     }
 }
