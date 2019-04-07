@@ -1,61 +1,31 @@
 ﻿using System;
-using System.IO;
 using System.Collections.Generic;
-
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
 namespace LudumGL
 {
-    /// <summary>
-    /// Represents an object that can be drawn using
-    /// LudumGL's renderer.
-    /// </summary>
-    public class Drawable
+    public abstract class Drawable
     {
-        #region Static
-        public static Drawable MakeDrawable(Mesh mesh, params Shader[] shaders)
-        {
-            Drawable drawable = new Drawable
-            {
-                mesh = mesh
-            };
-
-            drawable.AddShader(Shaders.Projection);
-            foreach (Shader shader in shaders)
-            {
-                drawable.AddShader(shader);
-            }
-
-            drawable.Finish();
-            return drawable;
-        }
-        #endregion
-        readonly int program;
-        List<int> shaders;
-        Dictionary<string, int> uniforms;
+        internal int program;
+        internal List<int> shaders;
+        internal Dictionary<string, int> uniforms;
 
         /// <summary>
-        /// The mesh data that will be drawn
-        /// using this object.
+        /// The material of this object.
         /// </summary>
-        public Mesh mesh;
-
-        /// <summary>
-        /// The texture of this object. Null means
-        /// no texture.
-        /// </summary>
-        public Texture Texture { get; set; }
-
-        /// <summary>
-        /// The color of this object.
-        /// </summary>
-        public Vector4 Albedo { get; set; } = new Vector4(1, 1, 1, 1);
+        public Material Material { get; set; } = Material.Default;
 
         /// <summary>
         /// The transform of this object.
         /// </summary>
-        public Transform transform;
+        public Transform Transform { get; set; } = Transform.Identity;
+
+        /// <summary>
+        /// Specifies which matrices of the used camera should be ignored.
+        /// Useful for rendering skyboxes.
+        /// </summary>
+        public MatrixIgnoreMode CameraIgnore { get; set; } = MatrixIgnoreMode.None;
 
         public Drawable()
         {
@@ -84,14 +54,12 @@ namespace LudumGL
         /// Finalizes this object. Always call before
         /// trying to draw the object.
         /// </summary>
-        public void Finish()
+        public virtual void Finish()
         {
             int i = 0;
             foreach (int shader in shaders)
             {
                 GL.AttachShader(program, shader);
-                string log = GL.GetShaderInfoLog(shader);
-                if (log.Length > 0) Console.WriteLine("Shader{0}: {1}", i, log);
                 i++;
             }
             GL.LinkProgram(program);
@@ -100,64 +68,9 @@ namespace LudumGL
                 GL.DetachShader(program, shader);
             }
             shaders.Clear();
-            mesh.Refresh();
         }
 
-        /// <summary>
-        /// Renders this object from the view of the
-        /// specified camera.
-        /// </summary>
-        /// <param name="camera"></param>
-        public void Render(Camera camera)
-        {
-            if (mesh == null) return;
-
-            GL.BindBuffer(BufferTarget.ArrayBuffer, mesh.vertexBuffer);
-            GL.EnableVertexAttribArray(0);
-            GL.VertexAttribPointer(0, 4, VertexAttribPointerType.Float, false, 0, 0);
-
-            GL.BindBuffer(BufferTarget.ArrayBuffer, mesh.normalBuffer);
-            GL.EnableVertexAttribArray(1);
-            GL.VertexAttribPointer(1, 4, VertexAttribPointerType.Float, false, 0, 0);
-
-            GL.BindBuffer(BufferTarget.ArrayBuffer, mesh.uvBuffer);
-            GL.EnableVertexAttribArray(2);
-            GL.VertexAttribPointer(2, 4, VertexAttribPointerType.Float, false, 0, 0);
-
-            GL.UseProgram(program);
-
-            SetMatrix4("translation", transform.TranslationMatrix);
-            SetMatrix4("rotation", transform.RotationMatrix);
-            SetMatrix4("scale", transform.ScaleMatrix);
-            SetMatrix4("projection", (Matrix4.Invert(camera.Transform.TranslationMatrix) * camera.Transform.RotationMatrix) * camera.Projection);
-
-            SetVector3("ambient", Game.AmbientLightColor);
-            SetVector4("albedo", Albedo);
-
-            if(Texture!=null)
-            {
-                GL.BindTexture(TextureTarget.Texture2D, Texture.glTexture);
-                GL.ActiveTexture(TextureUnit.Texture0);
-                SetFloat("tex0", 0);
-                SetFloat("useTex", 1);
-            }
-
-            //Set light data
-            for (int i = 0; i < Game.activeLights.Length; i++)
-            {
-                Light light = Game.activeLights[i];
-                if (light == null) continue;
-                string name = "lights[" + i + "].";
-                SetFloat(name + "enabled", light.enabled ? 1 : 0);
-                SetFloat(name + "type", (int)light.type);
-                SetMatrix4(name + "translation", light.Translation);
-                SetMatrix4(name + "rotation", light.Rotation);
-                SetVector4(name + "color", light.color);
-                SetFloat(name + "range", light.range);
-            }
-
-            GL.DrawElements(PrimitiveType.Triangles, mesh.vertices.Length, DrawElementsType.UnsignedInt, mesh.indices);
-        }
+        public abstract void Render(Camera camera);
 
         #region UniformSetters
         /// <summary>
@@ -171,7 +84,7 @@ namespace LudumGL
             {
                 int uniform = GL.GetUniformLocation(program, name);
                 uniforms.Add(name, uniform);
-                
+
             }
             int location = uniforms[name];
             GL.Uniform1(location, value);
@@ -241,5 +154,17 @@ namespace LudumGL
             GL.UniformMatrix4(location, false, ref value);
         }
         #endregion
+    }
+
+    /// <summary>
+    /// Specifies which camera matrices the renderer
+    /// should ignore.
+    /// </summary>
+    public enum MatrixIgnoreMode
+    {
+        None = 0b111,
+        Translation = 0b011,
+        Rotation = 0b101,
+        Scale = 0b110
     }
 }
