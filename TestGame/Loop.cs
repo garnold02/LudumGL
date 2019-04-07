@@ -15,7 +15,7 @@ namespace TestGame
         {
             Game.MouseLocked = true;
 
-            Game.AmbientLightColor = Vector3.One * 0.15f;
+            Game.AmbientLightColor = Vector3.One * 0.5f;
             light = new Light
             {
                 enabled = true,
@@ -31,6 +31,13 @@ namespace TestGame
                 FarClip = 1000
             };
             camera.Transform.localPosition = new Vector3(0, 5, 10);
+
+            Camera skyCam = new Camera()
+            {
+                FarClip = 100,
+                Depth = -1,
+            };
+            skyCam.Transform.Parent = camera.Transform;
             Game.mainCamera = camera;
             Input.MouseSensitivity = 0.1f;
 
@@ -43,31 +50,28 @@ namespace TestGame
 
                 GameObject fallingCube = new GameObject()
                 {
-                    Drawable = Drawable.MakeDrawable(cubeMesh, Shaders.Lit),
+                    Drawable = RenderMesh.MakeRenderMesh(cubeMesh, Shaders.Lit),
                     Transform = new Transform() { localPosition = new Vector3(0, 5+i*2, 0) }
                 };
                 fallingCube.Transform.Rotate(i*10, i*10, i*10);
-                fallingCube.Drawable.Albedo = new Vector4(i/num, 1-(i/num), ((i+num/2f)%num)/num, 1f);
-                fallingCube.Drawable.Texture = crateTexture;
+                fallingCube.Drawable.Material.Albedo = new Vector4(i/num, 1-(i/num), ((i+num/2f)%num)/num, 1f);
+                fallingCube.Drawable.Material.Texture = crateTexture;
 
                 BoxCollider collider = new BoxCollider();
                 PhysicsBody physicsBody = new PhysicsBody();
                 fallingCube.AddComponent(collider);
                 fallingCube.AddComponent(physicsBody);
-                fallingCube.AddComponent(new Mover() { force=new Vector3(0,-0.1f,0)});
                 GameObject.Add(fallingCube);
             }
 
             GameObject floor = new GameObject()
             {
-                Drawable = Drawable.MakeDrawable(Mesh.Load("assets/mesh/cube.dae"), Shaders.Lit),
+                Drawable = RenderMesh.MakeRenderMesh(Mesh.Load("assets/mesh/cube.dae"), Shaders.Lit),
                 Transform = new Transform() { localPosition = new Vector3(0, 0, 0), localScale=new Vector3(100,1,100) }
             };
-            floor.Drawable.Texture = floorTexture;
-            BoxCollider floorCollider = new BoxCollider()
-            {
-                Size = floor.Transform.localScale
-            };
+            floor.Drawable.Material.Texture = floorTexture;
+            floor.Drawable.Material.Tiling = Vector2.One * 10;
+            BoxCollider floorCollider = new BoxCollider();
             PhysicsBody floorBody = new PhysicsBody() { Mass = 0 };
             floor.AddComponent(floorCollider);
             floor.AddComponent(floorBody);
@@ -75,12 +79,22 @@ namespace TestGame
 
             GameObject sky = new GameObject()
             {
-                Drawable = Drawable.MakeDrawable(Mesh.Load("assets/mesh/sky.dae"), Shaders.Unlit),
-                Transform = new Transform() { localScale = Vector3.One * 400, localPosition=new Vector3(0,100,0) }
+                Drawable = RenderMesh.MakeRenderMesh(Mesh.Load("assets/mesh/sky.dae"), Shaders.Unlit),
+                Transform = new Transform() { localScale = Vector3.One, localPosition=new Vector3(0,0,0) },
+                CameraOverride=skyCam
             };
             sky.Transform.Rotate(-90, 0, 0);
-            sky.Drawable.Texture = Texture.LoadFromFile("assets/tex/sky.png", TextureFilteringMode.Nearest);
+            sky.Drawable.Material.Texture = Texture.LoadFromFile("assets/tex/sky.png", TextureFilteringMode.Nearest);
+            sky.Drawable.CameraIgnore = MatrixIgnoreMode.Translation;
             GameObject.Add(sky);
+
+            GameObject crosshair = new GameObject()
+            {
+                Drawable = RenderMesh.MakeRenderMesh(cubeMesh, Shaders.Unlit),
+                Transform=new Transform { localPosition=new Vector3(0,0,-1), localScale=Vector3.One*0.01f}
+            };
+            crosshair.CameraOverride = new Camera() { Depth = 1 };
+            GameObject.Add(crosshair);
         }
 
         public override void Update(object sender, FrameEventArgs e)
@@ -111,7 +125,18 @@ namespace TestGame
             {
                 camera.Transform.Rotate(0, 0, 2);
             }
-            camera.Transform.Rotate(-Input.MouseDelta.Y * Input.MouseSensitivity, -Input.MouseDelta.X * Input.MouseSensitivity, 0);
+            camera.Transform.Rotate(-Input.MouseDelta.Y, -Input.MouseDelta.X, 0);
+
+            if(Input.GetButton(MouseButton.Left))
+            {
+                if (Physics.Raycast(camera.ForwardRay, out RaycastData data))
+                {
+                    if (data.body != null)
+                    {
+                        data.body.AddForce((camera.Transform.Position-data.body.Parent.Transform.Position).Normalized()*1f);
+                    }
+                }
+            }
         }
 
         public override void Render(object sender, FrameEventArgs e)
