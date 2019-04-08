@@ -103,6 +103,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="assets\tex\defaultButton.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="assets\tex\crate.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

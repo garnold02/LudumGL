@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using LudumGL;
 using LudumGL.Components;
 using LudumGL.UserInterface;
+using LudumGL.Debugging;
 using OpenTK;
 using OpenTK.Input;
 
@@ -11,10 +12,10 @@ namespace TestGame
     class Loop : GameLoop
     {
         static Light light;
-        static Camera camera;
         public override void Start()
         {
-            Game.MouseLocked = true;
+            //Game.MouseLocked = true;
+            Debug.Enabled = true;
 
             Game.AmbientLightColor = Vector3.One * 0.5f;
             light = new Light
@@ -27,19 +28,18 @@ namespace TestGame
                 rotation = Quaternion.FromEulerAngles(-45, 0, 0)
             };
             Game.activeLights[0] = light;
-            camera = new Camera()
-            {
-                FarClip = 1000
-            };
-            camera.Transform.localPosition = new Vector3(0, 5, 10);
+            FlyingCamera flyingCamera = new FlyingCamera(0, 5, -5);
+            Debug.AddDebugObject(flyingCamera);
+
+            flyingCamera.Camera.Transform.localPosition = new Vector3(0, 5, 10);
 
             Camera skyCam = new Camera()
             {
                 FarClip = 100,
                 Depth = -1,
             };
-            skyCam.Transform.Parent = camera.Transform;
-            Game.mainCamera = camera;
+            skyCam.Transform.Parent = flyingCamera.Camera.Transform;
+            Game.mainCamera = flyingCamera.Camera;
             Input.MouseSensitivity = 0.1f;
 
             Mesh cubeMesh = Mesh.Load("assets/mesh/cube.dae");
@@ -89,52 +89,36 @@ namespace TestGame
             sky.Drawable.CameraIgnore = MatrixIgnoreMode.Translation;
             GameObject.Add(sky);
 
-            GameObject crosshair = new GameObject()
+            Texture panelTex= Texture.LoadFromFile("assets/tex/defaultButton.png");
+            Panel p = new Panel()
             {
-                Drawable = DrawableMesh.Create(cubeMesh, Shaders.Unlit),
-                Transform=new Transform { localPosition=new Vector3(0,0,-1), localScale=Vector3.One*0.01f}
+                Position = new Vector2(-1, -1),
+                Pivot = new Vector2(-1, -1),
+                PixelTranslation=Vector2.One*16
             };
-            crosshair.CameraOverride = new Camera() { Depth = 1 };
-            GameObject.Add(crosshair);
+            p.Material.Texture = panelTex;
+            UI.AddElement(p);
+            Panel p2 = new Panel()
+            {
+                Position = new Vector2(1, -1),
+                Pivot = new Vector2(1, -1),
+                PixelTranslation = new Vector2(-16, 16)
+            };
+            p2.Material.Texture = panelTex;
+            UI.AddElement(p2);
         }
 
         public override void Update(object sender, FrameEventArgs e)
         {
             if (Input.GetKeyDown(Key.Home)) Game.MouseLocked = !Game.MouseLocked;
             if (Input.GetKeyDown(Key.Escape)) Game.Exit();
-            if (Input.GetKey(Key.W))
+            if (Input.GetButton(MouseButton.Left))
             {
-                camera.Transform.localPosition += Game.mainCamera.Transform.Forward * 0.5f;
-            }
-            if (Input.GetKey(Key.S))
-            {
-                camera.Transform.localPosition -= Game.mainCamera.Transform.Forward * 0.5f;
-            }
-            if (Input.GetKey(Key.A))
-            {
-                camera.Transform.localPosition -= Game.mainCamera.Transform.Right * 0.5f;
-            }
-            if (Input.GetKey(Key.D))
-            {
-                camera.Transform.localPosition += Game.mainCamera.Transform.Right * 0.5f;
-            }
-            if (Input.GetKey(Key.Q))
-            {
-                camera.Transform.Rotate(0, 0, -2);
-            }
-            if (Input.GetKey(Key.E))
-            {
-                camera.Transform.Rotate(0, 0, 2);
-            }
-            camera.Transform.Rotate(-Input.MouseDelta.Y, -Input.MouseDelta.X, 0);
-
-            if(Input.GetButton(MouseButton.Left))
-            {
-                if (Physics.Raycast(camera.ForwardRay, out RaycastData data))
+                if (Physics.Raycast(Game.mainCamera.ForwardRay, out RaycastData data))
                 {
                     if (data.body != null)
                     {
-                        data.body.AddForce((camera.Transform.Position-data.body.Parent.Transform.Position).Normalized()*1f);
+                        data.body.AddForce((Game.mainCamera.Transform.Position-data.body.Parent.Transform.Position).Normalized()*1f);
                     }
                 }
             }

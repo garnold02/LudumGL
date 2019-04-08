@@ -3,6 +3,7 @@ using OpenTK;
 using OpenTK.Input;
 using OpenTK.Graphics.OpenGL;
 
+using LudumGL.Debugging;
 using LudumGL.UserInterface;
 
 namespace LudumGL
@@ -85,6 +86,8 @@ namespace LudumGL
         {
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.CullFace);
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             activeLights = new Light[10];
 
             Physics.Initialize();
@@ -96,6 +99,8 @@ namespace LudumGL
             Input.Update();
             GameObject.Update();
             UI.Update();
+            Debug.Update();
+            
             
             if(MouseLocked)
             {
@@ -115,11 +120,13 @@ namespace LudumGL
         static void PreRender(object sender, FrameEventArgs e)
         {
             GameObject.Render();
-            UI.Render();
+            Debug.Render();
         }
 
         static void PostRender(object sender, FrameEventArgs e)
         {
+            UI.Render();
+
             window.SwapBuffers();
             GL.ClearColor(0, 0, 0, 1);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);

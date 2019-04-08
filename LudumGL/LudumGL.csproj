@@ -82,6 +82,9 @@
     <Compile Include="Components\MeshCollider.cs" />
     <Compile Include="Components\PhysicsBody.cs" />
     <Compile Include="Components\SphereCollider.cs" />
+    <Compile Include="Debugging\Debug.cs" />
+    <Compile Include="Debugging\FlyingCamera.cs" />
+    <Compile Include="Debugging\IDebugObject.cs" />
     <Compile Include="Drawable.cs" />
     <Compile Include="Material.cs" />
     <Compile Include="DrawableMesh.cs" />

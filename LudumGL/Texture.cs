@@ -14,8 +14,13 @@ namespace LudumGL
         #region Static
         public static Texture LoadFromFile(string path, TextureFilteringMode filteringMode=TextureFilteringMode.Linear)
         {
-            Texture texture = new Texture();
             Bitmap bitmap = new Bitmap(path);
+
+            Texture texture = new Texture()
+            {
+                Width = bitmap.Width,
+                Height = bitmap.Height
+            };
             bitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
             BitmapData data = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             bitmap.UnlockBits(data);
