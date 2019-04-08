@@ -16,10 +16,10 @@ namespace LudumGL
         public static Camera Default { get; } = new Camera();
 
         /// <summary>
-        /// Returns the origin camera with the highest possible depth.
-        /// Use this for drawing on the user interface.
+        /// Ortographic camera at the origin with the highest possible depth value.
+        /// Reserved for rendering UI elements.
         /// </summary>
-        public static Camera UI { get; } = new Camera() { Depth = int.MaxValue };
+        public static Camera UI { get; } = new Camera() { Depth = int.MaxValue, ProjectionMode=CameraProjectionMode.Ortograpic };
         #endregion
 
         /// <summary>
@@ -53,8 +53,31 @@ namespace LudumGL
         /// <summary>
         /// Returns the projection matrix of this camera.
         /// </summary>
-        public Matrix4 Projection { get => Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(FieldOfView), Game.AspectRatio, NearClip, FarClip); }
+        public Matrix4 Projection
+        {
+            get
+            {
+                if (ProjectionMode == CameraProjectionMode.Perspective)
+                    return Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(FieldOfView), Game.AspectRatio, NearClip, FarClip);
+                else
+                    return Matrix4.CreateOrthographic(Game.window.Width, Game.window.Height, NearClip, FarClip);
+            }
+        }
 
+        /// <summary>
+        /// Returns a ray that goes from the camera position towards the camera orientation.
+        /// </summary>
         public Ray ForwardRay { get => new Ray() { Origin = Transform.Position, Direction = Transform.Forward }; }
+
+        /// <summary>
+        /// Defines what kind of projection matrix the camera should have.
+        /// </summary>
+        public CameraProjectionMode ProjectionMode { get; set; }
+    }
+
+    public enum CameraProjectionMode
+    {
+        Perspective,
+        Ortograpic
     }
 }
