@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using OpenTK.Graphics.OpenGL;
 
 namespace LudumGL.UserInterface
 {
@@ -30,6 +31,7 @@ namespace LudumGL.UserInterface
 
         internal static void Render()
         {
+            GL.Clear(ClearBufferMask.DepthBufferBit);
             foreach (UIElement element in elements)
             {
                 element.drawable.Render(Camera.UI);
