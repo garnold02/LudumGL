@@ -4,6 +4,10 @@ using OpenTK.Input;
 
 namespace LudumGL.Debugging
 {
+    /// <summary>
+    /// A debugging tool that will provide you with a controllable
+    /// flying camera.
+    /// </summary>
     public class FlyingCamera : IDebugObject
     {
         public Camera Camera { get; } = new Camera() { FarClip=1000f};

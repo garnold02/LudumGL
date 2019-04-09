@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using LudumGL;
+using LudumGL.Rendering;
 using LudumGL.Components;
 using LudumGL.UserInterface;
 using LudumGL.Debugging;
@@ -12,6 +13,7 @@ namespace TestGame
     class Loop : GameLoop
     {
         static Light light;
+        static ScalablePanel panel;
         public override void Start()
         {
             //Game.MouseLocked = true;
@@ -89,25 +91,33 @@ namespace TestGame
             sky.Drawable.CameraIgnore = MatrixIgnoreMode.Translation;
             GameObject.Add(sky);
 
-            Texture panelTex= Texture.LoadFromFile("assets/tex/defaultButton.png");
-            Panel p = new Panel()
+            Texture crosshairTex= Texture.LoadFromFile("assets/tex/crosshair.png");
+            Panel crosshair = new Panel();
+            crosshair.Material.Texture = crosshairTex;
+            UI.AddElement(crosshair);
+
+            Texture panelTex = Texture.LoadFromFile("assets/tex/panel.png");
+
+            panel = new ScalablePanel
             {
                 Position = new Vector2(-1, -1),
                 Pivot = new Vector2(-1, -1),
-                PixelTranslation=Vector2.One*16
+                PixelTranslation = new Vector2(8, 8),
+                Size=new Vector2(10,5)
             };
-            p.Material.Texture = panelTex;
-            UI.AddElement(p);
-            Panel p2 = new Panel()
+            panel.Material.Texture = panelTex;
+
+            UIText text = new UIText()
             {
-                Position = new Vector2(1, -1),
-                Pivot = new Vector2(1, -1),
-                PixelTranslation = new Vector2(-16, 16)
+                Text = "hello, world!"
             };
-            p2.Material.Texture = panelTex;
-            UI.AddElement(p2);
+            text.Material.Texture = panelTex;
+
+            UI.AddElement(panel);
+            UI.AddElement(text);
         }
 
+        static float t;
         public override void Update(object sender, FrameEventArgs e)
         {
             if (Input.GetKeyDown(Key.Home)) Game.MouseLocked = !Game.MouseLocked;
@@ -122,6 +132,9 @@ namespace TestGame
                     }
                 }
             }
+
+            panel.Size = new Vector2(1,0.5f) * (float)(Math.Sin(t)+2)*4;
+            t += 0.05f;
         }
 
         public override void Render(object sender, FrameEventArgs e)

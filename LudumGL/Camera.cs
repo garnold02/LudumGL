@@ -60,7 +60,7 @@ namespace LudumGL
                 if (ProjectionMode == CameraProjectionMode.Perspective)
                     return Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(FieldOfView), Game.AspectRatio, NearClip, FarClip);
                 else
-                    return Matrix4.CreateOrthographic(Game.window.Width, Game.window.Height, NearClip, FarClip);
+                    return Matrix4.CreateOrthographic(Game.EvenWidth, Game.EvenHeight, NearClip, FarClip);
             }
         }
 

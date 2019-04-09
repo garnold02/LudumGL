@@ -41,6 +41,21 @@ namespace LudumGL
         public static float AspectRatio { get => window.Width / (float)window.Height; }
 
         /// <summary>
+        /// Returns the window's dimensions
+        /// </summary>
+        public static Vector2 WindowSize { get => new Vector2(window.Width, window.Height); set { window.Width = (int)value.X; window.Height = (int)value.Y; } }
+
+        /// <summary>
+        /// Returns the closest even number to the window's width.
+        /// </summary>
+        public static int EvenWidth { get => window.Width - window.Width % 2; }
+
+        /// <summary>
+        /// Returns the closest even number to the window's height.
+        /// </summary>
+        public static int EvenHeight { get => window.Height - window.Height % 2; }
+
+        /// <summary>
         /// Ambient light color of the scene.
         /// </summary>
         public static Vector3 AmbientLightColor { get; set; } = new Vector3(0.1f, 0.1f, 0.1f);
@@ -58,7 +73,7 @@ namespace LudumGL
             {
                 Title = initialSettigns.Title
             };
-            if(initialSettigns.Fullscreen)
+            if (initialSettigns.Fullscreen)
                 window.WindowState = WindowState.Fullscreen;
 
             window.UpdateFrame += PreUpdate;
@@ -86,8 +101,14 @@ namespace LudumGL
         {
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.CullFace);
-            GL.Enable(EnableCap.Blend);
-            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+
+            //Not sure if I need it or not
+            /*GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);*/
+
+            GL.Enable(EnableCap.AlphaTest);
+            GL.AlphaFunc(AlphaFunction.Greater, 0);
+
             activeLights = new Light[10];
 
             Physics.Initialize();
@@ -100,16 +121,17 @@ namespace LudumGL
             GameObject.Update();
             UI.Update();
             Debug.Update();
-            
-            
-            if(MouseLocked)
+
+            if (MouseLocked)
             {
                 Mouse.SetPosition(0, 0);
                 window.CursorVisible = false;
-            }else
+            }
+            else
             {
                 window.CursorVisible = true;
             }
+
         }
 
         static void PostUpdate(object sender, FrameEventArgs e)
@@ -131,10 +153,11 @@ namespace LudumGL
             GL.ClearColor(0, 0, 0, 1);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
         }
-        
+
         static void Resize(object sender, EventArgs e)
         {
-            GL.Viewport(0, 0, window.Width, window.Height);
+            GL.Viewport(0, 0, EvenWidth, EvenHeight);
+            Console.WriteLine("w {0} h {1}", window.Width, window.Height);
         }
     }
 

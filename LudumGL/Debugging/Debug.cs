@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace LudumGL.Debugging
 {
+    /// <summary>
+    /// Class containing various helpful debugging tools.
+    /// </summary>
     public class Debug
     {
         static List<IDebugObject> debugObjects=new List<IDebugObject>();
