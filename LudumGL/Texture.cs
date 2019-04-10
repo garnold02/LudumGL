@@ -12,7 +12,7 @@ namespace LudumGL
     public class Texture
     {
         #region Static
-        public static Texture LoadFromFile(string path, TextureFilteringMode filteringMode=TextureFilteringMode.Linear)
+        public static Texture LoadFromFile(string path, TextureFilteringMode filteringMode=TextureFilteringMode.Nearest)
         {
             Bitmap bitmap = new Bitmap(path);
 

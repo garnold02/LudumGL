@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 using OpenTK;
 using OpenTK.Input;
 
@@ -16,6 +17,11 @@ namespace LudumGL
         /// Relative mouse movement.
         /// </summary>
         public static Vector2 MouseDelta { get; private set; }
+
+        /// <summary>
+        /// Mouse position in window coordinates.
+        /// </summary>
+        public static Vector2 MousePosition { get; private set; }
         private static Vector2 mousePositionLast;
 
         /// <summary>
@@ -33,10 +39,9 @@ namespace LudumGL
                 if (currentPressedKeys[i] == 2) currentPressedKeys[i] = 1;
             }
             mouseState = Mouse.GetState();
-            Vector2 currentMousePosition = new Vector2(mouseState.X, mouseState.Y);
-            MouseDelta = (mousePositionLast - currentMousePosition) * MouseSensitivity;
-            mousePositionLast = currentMousePosition;
-
+            MousePosition = new Vector2(mouseState.X, mouseState.Y);
+            MouseDelta = (mousePositionLast - MousePosition) * MouseSensitivity;
+            mousePositionLast = MousePosition;
             if (!Game.window.Focused) MouseDelta = new Vector2(0, 0);
 
         }

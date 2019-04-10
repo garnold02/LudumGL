@@ -54,10 +54,10 @@ namespace TestGame
                 GameObject fallingCube = new GameObject()
                 {
                     Drawable = DrawableMesh.Create(cubeMesh, Shaders.Lit),
-                    Transform = new Transform() { localPosition = new Vector3(0, 5+i*2, 0) }
+                    Transform = new Transform() { localPosition = new Vector3(0, 5 + i * 2, 0) }
                 };
-                fallingCube.Transform.Rotate(i*10, i*10, i*10);
-                fallingCube.Drawable.Material.Albedo = new Vector4(i/num, 1-(i/num), ((i+num/2f)%num)/num, 1f);
+                fallingCube.Transform.Rotate(i * 10, i * 10, i * 10);
+                fallingCube.Drawable.Material.Albedo = new Vector4(i / num, 1 - (i / num), ((i + num / 2f) % num) / num, 1f);
                 fallingCube.Drawable.Material.Texture = crateTexture;
 
                 BoxCollider collider = new BoxCollider();
@@ -70,7 +70,7 @@ namespace TestGame
             GameObject floor = new GameObject()
             {
                 Drawable = DrawableMesh.Create(Mesh.Load("assets/mesh/cube.dae"), Shaders.Lit),
-                Transform = new Transform() { localPosition = new Vector3(0, 0, 0), localScale=new Vector3(100,1,100) }
+                Transform = new Transform() { localPosition = new Vector3(0, 0, 0), localScale = new Vector3(100, 1, 100) }
             };
             floor.Drawable.Material.Texture = floorTexture;
             floor.Drawable.Material.Tiling = Vector2.One * 10;
@@ -83,41 +83,60 @@ namespace TestGame
             GameObject sky = new GameObject()
             {
                 Drawable = DrawableMesh.Create(Mesh.Load("assets/mesh/sky.dae"), Shaders.Unlit),
-                Transform = new Transform() { localScale = Vector3.One, localPosition=new Vector3(0,0,0) },
-                CameraOverride=skyCam
+                Transform = new Transform() { localScale = Vector3.One, localPosition = new Vector3(0, 0, 0) },
+                CameraOverride = skyCam
             };
             sky.Transform.Rotate(-90, 0, 0);
             sky.Drawable.Material.Texture = Texture.LoadFromFile("assets/tex/sky.png", TextureFilteringMode.Nearest);
             sky.Drawable.CameraIgnore = MatrixIgnoreMode.Translation;
             GameObject.Add(sky);
 
-            Texture crosshairTex= Texture.LoadFromFile("assets/tex/crosshair.png");
+            Texture crosshairTex = Texture.LoadFromFile("assets/tex/crosshair.png");
             Panel crosshair = new Panel();
             crosshair.Material.Texture = crosshairTex;
             UI.AddElement(crosshair);
 
-            Texture panelTex = Texture.LoadFromFile("assets/tex/panel.png");
-
-            panel = new ScalablePanel
-            {
-                Position = new Vector2(-1, -1),
-                Pivot = new Vector2(-1, -1),
-                PixelTranslation = new Vector2(8, 8),
-                Size=new Vector2(10,5)
-            };
-            panel.Material.Texture = panelTex;
-
+            Font font = Font.Load("assets/tex/font.png", 10, 10);
             UIText text = new UIText()
             {
-                Text = "hello, world!"
+                Text = "LudumGL 1.0\n\nI've never seen this much\nspaghetti code in my entire\nlife!",
+                Font = font,
+                Position = new Vector2(-1, -1),
+                PixelTranslation = new Vector2(16, 16),
             };
-            text.Material.Texture = panelTex;
+            text.Material.Albedo = new Vector4(0, 0, 0, 1);
 
-            UI.AddElement(panel);
+            panel = new ScalablePanel();
+            panel.Material.Texture = Texture.LoadFromFile("assets/tex/panel.png");
+
+            panel.Position = new Vector2(-1, -1);
+            panel.Pivot = new Vector2(-1, -1);
+            panel.Size = new Vector2(1, 0.5f) * 9;
+            panel.PixelTranslation = Vector2.One * 8;
+
+            ScalablePanel button = new ScalablePanel();
+            button.Material.Texture = Texture.LoadFromFile("assets/tex/panel.png");
+            button.Material.Albedo = new Vector4(1, 0.5f, 0.25f, 1);
+            button.Size = new Vector2(3, 1);
+            button.Pivot = new Vector2(-1, 1);
+            button.Position = new Vector2(-1, 1);
+            button.PixelTranslation = new Vector2(8, -8);
+            button.Parent = panel;
+
+            UIText buttonText = new UIText()
+            {
+                Font=font,
+                Parent=button,
+                Text=" Button",
+                Position=new Vector2(-1,-1),
+                PixelTranslation=new Vector2(8,8)
+            };
+
             UI.AddElement(text);
+            UI.AddElement(buttonText);
+            UI.AddElement(button);
+            UI.AddElement(panel);
         }
-
-        static float t;
         public override void Update(object sender, FrameEventArgs e)
         {
             if (Input.GetKeyDown(Key.Home)) Game.MouseLocked = !Game.MouseLocked;
@@ -128,13 +147,10 @@ namespace TestGame
                 {
                     if (data.body != null)
                     {
-                        data.body.AddForce((Game.mainCamera.Transform.Position-data.body.Parent.Transform.Position).Normalized()*1f);
+                        data.body.AddForce((Game.mainCamera.Transform.Position - data.body.Parent.Transform.Position).Normalized() * 1f);
                     }
                 }
             }
-
-            panel.Size = new Vector2(1,0.5f) * (float)(Math.Sin(t)+2)*4;
-            t += 0.05f;
         }
 
         public override void Render(object sender, FrameEventArgs e)

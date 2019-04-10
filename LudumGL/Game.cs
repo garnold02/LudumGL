@@ -66,6 +66,7 @@ namespace LudumGL
         public static bool MouseLocked { get; set; }
 
         internal static GameWindow window;
+        internal static float elapsedTime;
 
         public static void Start()
         {
@@ -137,6 +138,7 @@ namespace LudumGL
         static void PostUpdate(object sender, FrameEventArgs e)
         {
             Physics.Update(2f / 100f);
+            elapsedTime += Time.DeltaTime;
         }
 
         static void PreRender(object sender, FrameEventArgs e)
