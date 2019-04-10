@@ -8,6 +8,16 @@ namespace LudumGL
     class Mathl
     {
         /// <summary>
+        /// Shorthand for 1/3
+        /// </summary>
+        public const float Third = 0.33333333333333333333f;
+
+        /// <summary>
+        /// Shorthand for 1/6
+        /// </summary>
+        public const float Sixth = 0.16666666666666666666f;
+
+        /// <summary>
         /// Maps a value from one range to another.
         /// </summary>
         /// <param name="value">The original value</param>
