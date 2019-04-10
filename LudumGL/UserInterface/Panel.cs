@@ -18,10 +18,11 @@ namespace LudumGL.UserInterface
 
         public override void Update()
         {
+            PositionAndScale(Material.Texture.Width, Material.Texture.Height);
+
             Drawable.Transform.localPosition = new Vector3((int)pixelPosition.X, (int)pixelPosition.Y, -1);
             Drawable.Transform.localScale = new Vector3((int)pixelSize.X, (int)pixelSize.Y, 1);
 
-            PositionAndScale();
             base.Update();
         }
     }

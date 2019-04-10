@@ -19,6 +19,16 @@ namespace LudumGL.UserInterface
         internal Vector2 pixelPosition;
 
         /// <summary>
+        /// Position calculations will be done relative to this element.
+        /// </summary>
+        public UIElement Parent { get; set; }
+
+        /// <summary>
+        /// Determines the depth of the object.
+        /// </summary>
+        public float Depth { get; set; }
+
+        /// <summary>
         /// The position of this element in normalized coordinates.
         /// </summary>
         public Vector2 Position { get; set; }
@@ -59,18 +69,43 @@ namespace LudumGL.UserInterface
             foreach (Drawable drawable in drawables)
             {
                 drawable.Material = Material;
+                drawable.Transform.localPosition.Z = -(Depth + 1);
             }
+
+            //Check for hover and click
+
         }
 
         /// <summary>
         /// Scales and positions the element appropriately.
         /// </summary>
-        internal void PositionAndScale()
+        internal void PositionAndScale(float elementScaleX, float elementScaleY, bool scale=true)
         {
-            float pixelPositionX = Position.X * 0.5f * Game.EvenWidth - Pivot.X * 0.5f * Material.Texture.Width + PixelTranslation.X;
-            float pixelPositionY = -Position.Y * 0.5f * Game.EvenHeight + Pivot.Y * 0.5f * Material.Texture.Height - PixelTranslation.Y;
-            pixelPosition = new Vector2(pixelPositionX, pixelPositionY);
-            pixelSize = new Vector2(Material.Texture.Width, Material.Texture.Height);
+            Vector2 parentPosition = new Vector2(0, 0);
+            Vector2 parentSize = new Vector2(Game.EvenWidth, Game.EvenHeight);
+
+            if (Parent != null)
+            {
+                parentPosition = Parent.pixelPosition;
+                parentSize = Parent.pixelSize;
+            }
+
+            float pixelPositionX = Position.X * 0.5f * parentSize.X - Pivot.X * 0.5f * elementScaleX + PixelTranslation.X;
+            float pixelPositionY = -Position.Y * 0.5f * parentSize.Y + Pivot.Y * 0.5f * elementScaleY - PixelTranslation.Y;
+            pixelPosition = new Vector2(pixelPositionX + parentPosition.X, pixelPositionY + parentPosition.Y);
+
+            if(scale)
+                pixelSize = new Vector2(elementScaleX, elementScaleY);
         }
+
+        /// <summary>
+        /// Executes when the used click on this element
+        /// </summary>
+        public event EventHandler OnClick;
+
+        /// <summary>
+        /// Executes when the user hovers on this element with the mouse cursor.
+        /// </summary>
+        public event EventHandler OnHover;
     }
 }
