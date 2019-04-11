@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using OpenTK;
 using OpenTK.Input;
@@ -12,6 +13,7 @@ namespace LudumGL
     {
         static readonly byte[] currentPressedKeys = new byte[Enum.GetNames(typeof(Key)).Length];
         static MouseState mouseState;
+        static readonly Dictionary<MouseButton, bool> pressedMouseButtons=new Dictionary<MouseButton, bool>();
 
         /// <summary>
         /// Relative mouse movement.
@@ -22,7 +24,8 @@ namespace LudumGL
         /// Mouse position in window coordinates.
         /// </summary>
         public static Vector2 MousePosition { get; private set; }
-        private static Vector2 mousePositionLast;
+        private static Vector2 deltaPosition;
+        private static Vector2 deltaPositionLast;
 
         /// <summary>
         /// Gets or sets the sensitivity of the mouse.
@@ -39,9 +42,14 @@ namespace LudumGL
                 if (currentPressedKeys[i] == 2) currentPressedKeys[i] = 1;
             }
             mouseState = Mouse.GetState();
-            MousePosition = new Vector2(mouseState.X, mouseState.Y);
-            MouseDelta = (mousePositionLast - MousePosition) * MouseSensitivity;
-            mousePositionLast = MousePosition;
+
+            deltaPosition = new Vector2(mouseState.X, mouseState.Y);
+            MouseDelta = (deltaPositionLast - deltaPosition) * MouseSensitivity;
+            deltaPositionLast = deltaPosition;
+
+            System.Drawing.Point mousePoint = Game.window.PointToClient(Cursor.Position);
+            MousePosition = new Vector2(mousePoint.X, mousePoint.Y);
+
             if (!Game.window.Focused) MouseDelta = new Vector2(0, 0);
 
         }
@@ -89,7 +97,14 @@ namespace LudumGL
         /// <returns></returns>
         public static bool GetButton(MouseButton button)
         {
-            return mouseState.IsButtonDown(button);
+            bool result= mouseState.IsButtonDown(button);
+
+            if (!pressedMouseButtons.ContainsKey(button))
+                pressedMouseButtons.Add(button, result);
+            else
+                pressedMouseButtons[button] = result;
+
+            return result;
         }
 
         /// <summary>
@@ -99,8 +114,8 @@ namespace LudumGL
         /// <returns></returns>
         public static bool GetButtonDown(MouseButton button)
         {
-            MouseState currentState = Mouse.GetState();
-            return (currentState.IsButtonDown(button) != mouseState.IsButtonDown(button) && currentState.IsButtonDown(button));
+            bool result = GetButton(button);
+            return result;
         }
     }
 }

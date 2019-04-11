@@ -12,11 +12,12 @@ namespace LudumGL.UserInterface
     {
 
         internal List<Drawable> drawables;
-
-        internal Drawable Drawable { get => drawables[0]; }
-
         internal Vector2 pixelSize;
         internal Vector2 pixelPosition;
+        bool isHovering;
+        bool isHoveringOld;
+
+        internal Drawable Drawable { get => drawables[0]; }
 
         /// <summary>
         /// Position calculations will be done relative to this element.
@@ -29,7 +30,7 @@ namespace LudumGL.UserInterface
         public float Depth { get; set; }
 
         /// <summary>
-        /// The position of this element in normalized coordinates.
+        /// The position of this element in window coordinates.
         /// </summary>
         public Vector2 Position { get; set; }
 
@@ -45,7 +46,7 @@ namespace LudumGL.UserInterface
         public Vector2 Pivot { get; set; } = Vector2.Zero;
 
         /// <summary>
-        /// The size of this element in normalized coordinates.
+        /// The size of this element.
         /// </summary>
         public Vector2 Size { get; set; } = Vector2.One;
 
@@ -69,11 +70,30 @@ namespace LudumGL.UserInterface
             foreach (Drawable drawable in drawables)
             {
                 drawable.Material = Material;
-                drawable.Transform.localPosition.Z = -(Depth + 1);
+                drawable.Transform.localPosition.Z = -(Depth + 10);
             }
 
             //Check for hover and click
+            Vector2 screenPosition = new Vector2(pixelPosition.X + Game.EvenWidth / 2, Game.EvenHeight - (pixelPosition.Y + Game.EvenHeight / 2)) + (Pivot / 2) * pixelSize;
 
+            if (Mathl.Overlap(Input.MousePosition.X, Input.MousePosition.Y, 1, 1, screenPosition.X, screenPosition.Y, pixelSize.X, pixelSize.Y)) {
+                isHovering = true;
+                OnHover?.Invoke(this, new EventArgs());
+                if (Input.GetButtonDown(OpenTK.Input.MouseButton.Left))
+                    OnClick?.Invoke(this, new EventArgs());
+
+                if (!isHoveringOld)
+                    OnMouseEnter?.Invoke(this, new EventArgs());
+            }
+            else
+            {
+                isHovering = false;
+                if (isHoveringOld)
+                    OnMouseLeave?.Invoke(this, new EventArgs());
+            }
+            isHoveringOld = isHovering;
+
+            OnUpdate?.Invoke(this, new EventArgs());
         }
 
         /// <summary>
@@ -99,7 +119,12 @@ namespace LudumGL.UserInterface
         }
 
         /// <summary>
-        /// Executes when the used click on this element
+        /// Executes every frame.
+        /// </summary>
+        public event EventHandler OnUpdate;
+
+        /// <summary>
+        /// Executes when the uses clicks on this element.
         /// </summary>
         public event EventHandler OnClick;
 
@@ -107,5 +132,15 @@ namespace LudumGL.UserInterface
         /// Executes when the user hovers on this element with the mouse cursor.
         /// </summary>
         public event EventHandler OnHover;
+
+        /// <summary>
+        /// Executes on the frame when the user starts hovering on this element with the mouse cursor.
+        /// </summary>
+        public event EventHandler OnMouseEnter;
+
+        /// <summary>
+        /// Executes on the frame when the user stops hovering on this element with the mouse cursor.
+        /// </summary>
+        public event EventHandler OnMouseLeave;
     }
 }
