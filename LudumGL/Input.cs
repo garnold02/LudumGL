@@ -13,7 +13,6 @@ namespace LudumGL
     {
         static readonly byte[] currentPressedKeys = new byte[Enum.GetNames(typeof(Key)).Length];
         static MouseState mouseState;
-        static readonly Dictionary<MouseButton, bool> pressedMouseButtons=new Dictionary<MouseButton, bool>();
 
         /// <summary>
         /// Relative mouse movement.
@@ -95,26 +94,10 @@ namespace LudumGL
         /// </summary>
         /// <param name="button"></param>
         /// <returns></returns>
-        public static bool GetButton(MouseButton button)
-        {
-            bool result= mouseState.IsButtonDown(button);
-
-            if (!pressedMouseButtons.ContainsKey(button))
-                pressedMouseButtons.Add(button, result);
-            else
-                pressedMouseButtons[button] = result;
-
-            return result;
-        }
-
-        /// <summary>
-        /// Returns true if the requested mouse button is pressed on this frame.
-        /// </summary>
-        /// <param name="button"></param>
-        /// <returns></returns>
         public static bool GetButtonDown(MouseButton button)
         {
-            bool result = GetButton(button);
+            bool result = mouseState.IsButtonDown(button);
+
             return result;
         }
     }

@@ -87,6 +87,7 @@
     <Compile Include="Debugging\FlyingCamera.cs" />
     <Compile Include="Debugging\IDebugObject.cs" />
     <Compile Include="Font.cs" />
+    <Compile Include="Random.cs" />
     <Compile Include="Rendering\Drawable.cs" />
     <Compile Include="Material.cs" />
     <Compile Include="Rendering\DrawableMesh.cs" />
@@ -107,6 +108,7 @@
     <Compile Include="Texture.cs" />
     <Compile Include="Time.cs" />
     <Compile Include="Transform.cs" />
+    <Compile Include="UserInterface\Button.cs" />
     <Compile Include="UserInterface\Panel.cs" />
     <Compile Include="UserInterface\ScalablePanel.cs" />
     <Compile Include="UserInterface\UIText.cs" />

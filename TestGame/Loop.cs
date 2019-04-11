@@ -59,7 +59,7 @@ namespace TestGame
 
         static void SetupCamera()
         {
-            FlyingCamera flyingCamera = new FlyingCamera(0, 0, -5);
+            FlyingCamera flyingCamera = new FlyingCamera(0, 0, 40);
             Debug.AddDebugObject(flyingCamera);
 
             Game.mainCamera = flyingCamera.Camera;
@@ -79,29 +79,6 @@ namespace TestGame
             toolbox.OnUpdate += ToolboxUpdate;
             toolbox.Material.Texture = panelTexture;
 
-            ScalablePanel spawnCubeButton = new ScalablePanel()
-            {
-                Parent = toolbox,
-                Pivot = new Vector2(-1, -1),
-                Position = new Vector2(-1, -1),
-                Size=new Vector2(3.5f,1),
-                PixelTranslation=Vector2.One*8
-            };
-            spawnCubeButton.Material.Texture = panelTexture;
-            spawnCubeButton.Material.Albedo = new Vector4(0.5f, 1, 0.5f, 1);
-            spawnCubeButton.OnClick += SpawnCube;
-
-            UIText spawnCubeText = new UIText()
-            {
-                Font = font,
-                Text = "Spawn cube",
-                Parent=spawnCubeButton,
-                Depth=-1,
-                Position=new Vector2(-1,-1),
-                PixelTranslation=Vector2.One*8
-            };
-            spawnCubeText.Material.Albedo = new Vector4(0, 0, 0, 1);
-
             void ToolboxUpdate(object sender, EventArgs e)
             {
                 ScalablePanel _sender = (ScalablePanel)sender;
@@ -110,8 +87,15 @@ namespace TestGame
             }
 
             UI.AddElement(toolbox);
-            UI.AddElement(spawnCubeButton);
-            UI.AddElement(spawnCubeText);
+
+            Button spawnCubeButton = new Button(panelTexture, font);
+            spawnCubeButton.Body.Parent = toolbox;
+            spawnCubeButton.Body.Pivot = -Vector2.One;
+            spawnCubeButton.Body.Position = -Vector2.One;
+            spawnCubeButton.Body.PixelTranslation = Vector2.One * 8;
+
+            spawnCubeButton.Body.AllowClickRepetition = true;
+            spawnCubeButton.Body.OnClick += SpawnCube;
         }
 
         static void SetupMeshes()
@@ -125,6 +109,7 @@ namespace TestGame
             {
                 Drawable=DrawableMesh.Create(cubeMesh, Shaders.Lit)
             };
+            cube.Transform.Rotate(LudumGL.Random.AngleDeg, LudumGL.Random.AngleDeg, LudumGL.Random.AngleDeg);
             BoxCollider collider = new BoxCollider();
             PhysicsBody body = new PhysicsBody();
             cube.AddComponent(collider);
