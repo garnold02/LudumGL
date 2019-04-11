@@ -71,5 +71,15 @@ namespace LudumGL.UserInterface
 
             base.Update();
         }
+
+        /// <summary>
+        /// Converts screen coordinates to pixel coordinates.
+        /// </summary>
+        /// <param name="screenCoordinates"></param>
+        /// <returns></returns>
+        public Vector2 ScreenToPixel(Vector2 screenCoordinates)
+        {
+            return new Vector2((screenCoordinates.X / Material.Texture.Width) * Game.EvenWidth, (screenCoordinates.Y / Material.Texture.Height) * Game.EvenHeight);
+        }
     }
 }
