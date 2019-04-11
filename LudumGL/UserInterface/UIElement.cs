@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using OpenTK;
 using LudumGL.Rendering;
+using OpenTK.Input;
 
 namespace LudumGL.UserInterface
 {
@@ -16,6 +17,7 @@ namespace LudumGL.UserInterface
         internal Vector2 pixelPosition;
         bool isHovering;
         bool isHoveringOld;
+        bool isPressed;
 
         internal Drawable Drawable { get => drawables[0]; }
 
@@ -55,6 +57,12 @@ namespace LudumGL.UserInterface
         /// </summary>
         public Material Material { get; set; } = Material.Default;
 
+        /// <summary>
+        /// If set to true, the OnClick event will execute on every frame as long
+        /// as the mouse left button is pressed.
+        /// </summary>
+        public bool AllowClickRepetition { get; set; } = false;
+
         public UIElement()
         {
             drawables = new List<Drawable>();
@@ -74,13 +82,24 @@ namespace LudumGL.UserInterface
             }
 
             //Check for hover and click
-            Vector2 screenPosition = new Vector2(pixelPosition.X + Game.EvenWidth / 2, Game.EvenHeight - (pixelPosition.Y + Game.EvenHeight / 2)) + (Pivot / 2) * pixelSize;
+            Vector2 screenPosition = new Vector2(pixelPosition.X + Game.EvenWidth / 2, Game.EvenHeight - (pixelPosition.Y + Game.EvenHeight / 2)) - pixelSize/2;
 
             if (Mathl.Overlap(Input.MousePosition.X, Input.MousePosition.Y, 1, 1, screenPosition.X, screenPosition.Y, pixelSize.X, pixelSize.Y)) {
                 isHovering = true;
                 OnHover?.Invoke(this, new EventArgs());
-                if (Input.GetButtonDown(OpenTK.Input.MouseButton.Left))
-                    OnClick?.Invoke(this, new EventArgs());
+                if (Input.GetButtonDown(MouseButton.Left))
+                {
+                    if(!isPressed)
+                    {
+                        OnClick?.Invoke(this, new EventArgs());
+                        if(!AllowClickRepetition) isPressed = true;
+                    }
+                }
+                else
+                {
+                    isPressed = false;
+                    OnClickStop?.Invoke(this, new EventArgs());
+                }
 
                 if (!isHoveringOld)
                     OnMouseEnter?.Invoke(this, new EventArgs());
@@ -88,6 +107,7 @@ namespace LudumGL.UserInterface
             else
             {
                 isHovering = false;
+                isPressed = false;
                 if (isHoveringOld)
                     OnMouseLeave?.Invoke(this, new EventArgs());
             }
@@ -124,9 +144,14 @@ namespace LudumGL.UserInterface
         public event EventHandler OnUpdate;
 
         /// <summary>
-        /// Executes when the uses clicks on this element.
+        /// Executes when the user clicks on this element.
         /// </summary>
         public event EventHandler OnClick;
+
+        /// <summary>
+        /// Executes when the user stops clicking this element.
+        /// </summary>
+        public event EventHandler OnClickStop;
 
         /// <summary>
         /// Executes when the user hovers on this element with the mouse cursor.
