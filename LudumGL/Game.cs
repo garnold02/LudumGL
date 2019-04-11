@@ -122,6 +122,7 @@ namespace LudumGL
             GameObject.Update();
             UI.Update();
             Debug.Update();
+            Random.Initialize();
 
             if (MouseLocked)
             {
