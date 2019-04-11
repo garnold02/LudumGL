@@ -34,19 +34,19 @@ namespace LudumGL.Debugging
         {
             if (Input.GetKey(Key.W))
             {
-                Camera.Transform.localPosition += Game.mainCamera.Transform.Forward * Speed;
+                Camera.Transform.localPosition += Camera.Transform.Forward * Speed;
             }
             if (Input.GetKey(Key.S))
             {
-                Camera.Transform.localPosition -= Game.mainCamera.Transform.Forward * Speed;
+                Camera.Transform.localPosition -= Camera.Transform.Forward * Speed;
             }
             if (Input.GetKey(Key.A))
             {
-                Camera.Transform.localPosition -= Game.mainCamera.Transform.Right * Speed;
+                Camera.Transform.localPosition -= Camera.Transform.Right * Speed;
             }
             if (Input.GetKey(Key.D))
             {
-                Camera.Transform.localPosition += Game.mainCamera.Transform.Right * Speed;
+                Camera.Transform.localPosition += Camera.Transform.Right * Speed;
             }
             if (Input.GetKey(Key.Q))
             {
@@ -56,7 +56,8 @@ namespace LudumGL.Debugging
             {
                 Camera.Transform.Rotate(0, 0, RotationSpeed);
             }
-            Camera.Transform.Rotate(-Input.MouseDelta.Y, -Input.MouseDelta.X, 0);
+            if(Game.MouseLocked)
+                Camera.Transform.Rotate(-Input.MouseDelta.Y, -Input.MouseDelta.X, 0);
         }
 
         public void Render()
