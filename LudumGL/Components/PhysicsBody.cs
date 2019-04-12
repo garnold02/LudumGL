@@ -1,6 +1,7 @@
 ﻿using System;
 using OpenTK;
 using BEPUphysics.Entities;
+using LudumGL.Scene;
 
 namespace LudumGL.Components
 {
@@ -16,11 +17,13 @@ namespace LudumGL.Components
         /// <summary>
         /// The mass of the body.
         /// </summary>
+        [SceneName("mass")]
         public float Mass { get; set; } = 1;
 
         /// <summary>
         /// How much the object slows down over time.
         /// </summary>
+        [SceneName("drag")]
         public float Drag { get; set; } = 0;
 
         public override void Start()

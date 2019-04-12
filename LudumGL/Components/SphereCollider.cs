@@ -2,11 +2,16 @@
 using BEPUphysics.BroadPhaseEntries.MobileCollidables;
 using BEPUphysics.CollisionShapes;
 using BEPUphysics.CollisionShapes.ConvexShapes;
+using LudumGL.Scene;
 
 namespace LudumGL.Components
 {
     public class SphereCollider : Collider
     {
+        /// <summary>
+        /// The radius of the spehere.
+        /// </summary>
+        [SceneName("radius")]
         public float Radius { get; set; } = 1;
         public SphereCollider() : base()
         {

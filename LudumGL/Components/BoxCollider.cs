@@ -2,6 +2,7 @@
 using BEPUphysics.BroadPhaseEntries.MobileCollidables;
 using BEPUphysics.CollisionShapes;
 using BEPUphysics.CollisionShapes.ConvexShapes;
+using LudumGL.Scene;
 
 namespace LudumGL.Components
 {
@@ -10,6 +11,7 @@ namespace LudumGL.Components
     /// </summary>
     public class BoxCollider : Collider
     {
+        [SceneName("size")]
         public Vector3 Size { get; set; } = Vector3.One;
 
         public BoxCollider() : base()

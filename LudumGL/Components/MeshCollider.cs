@@ -3,11 +3,13 @@ using BEPUphysics.BroadPhaseEntries.MobileCollidables;
 using BEPUphysics.CollisionShapes;
 using BEPUphysics.CollisionShapes.ConvexShapes;
 using bepu = BEPUutilities;
+using LudumGL.Scene;
 
 namespace LudumGL.Components
 {
     public class MeshCollider : Collider
     {
+        [SceneName("mesh")]
         public Mesh Mesh { get; set; }
         public MeshCollider(Mesh mesh) : base()
         {
