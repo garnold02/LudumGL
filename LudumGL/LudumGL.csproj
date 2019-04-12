@@ -103,6 +103,8 @@
     <Compile Include="Ray.cs" />
     <Compile Include="RaycastData.cs" />
     <Compile Include="Rendering\DrawableText.cs" />
+    <Compile Include="Scene\SceneLoader.cs" />
+    <Compile Include="Scene\SceneName.cs" />
     <Compile Include="Shader.cs" />
     <Compile Include="Shaders.cs" />
     <Compile Include="Texture.cs" />
@@ -118,6 +120,7 @@
   <ItemGroup>
     <None Include="config\OpenTK.dll.config" />
     <None Include="config\packages.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\AssimpNet.4.1.0\build\AssimpNet.targets" Condition="Exists('..\packages\AssimpNet.4.1.0\build\AssimpNet.targets')" />

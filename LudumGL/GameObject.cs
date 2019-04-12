@@ -78,7 +78,7 @@ namespace LudumGL
         #endregion
 
         bool internalEnabled;
-        readonly List<Component> components;
+        internal readonly List<Component> components;
 
         /// <summary>
         /// Determines whether the GameObject is
