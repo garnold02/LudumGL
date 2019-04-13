@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using OpenTK.Graphics.OpenGL;
 using LudumGL.Rendering;
+using LudumGL.Components;
+using LudumGL.Scene;
 
 namespace LudumGL
 {
     /// <summary>
     /// GameObject implementation.
     /// </summary>
-    public class GameObject
+    public class GameObject : ISceneObject
     {
         #region Static
         internal static List<GameObject> gameObjects = new List<GameObject>();
@@ -77,8 +79,12 @@ namespace LudumGL
         }
         #endregion
 
-        bool internalEnabled;
-        internal readonly List<Component> components;
+        [SceneData]
+        internal bool internalEnabled;
+        [SceneData]
+        internal List<Component> components;
+
+        public int Id { get; set; }
 
         /// <summary>
         /// Determines whether the GameObject is
@@ -110,12 +116,14 @@ namespace LudumGL
         /// <summary>
         /// The transform of this GameObject.
         /// </summary>
+        [SceneData]
         public Transform Transform { get; set; } = Transform.Identity;
 
         /// <summary>
         /// The drawable of this GameObject. Contains the shaders, texture, and mesh
         /// neccessary for drawing.
         /// </summary>
+        [SceneData]
         public Drawable Drawable { get; set; }
 
         /// <summary>
@@ -123,6 +131,7 @@ namespace LudumGL
         /// the default camera and the GameObject will be
         /// rendered from this one instead.
         /// </summary>
+        [SceneData]
         public Camera CameraOverride { get; set; } = Game.mainCamera;
 
         public GameObject()

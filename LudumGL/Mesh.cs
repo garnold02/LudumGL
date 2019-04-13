@@ -3,13 +3,15 @@ using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using a = Assimp;
 
+using LudumGL.Scene;
+
 namespace LudumGL
 {
     /// <summary>
     /// Represents a 3D model complete with vertices, indices,
     /// normals, and uvs.
     /// </summary>
-    public class Mesh
+    public class Mesh : ISceneResource
     {
         #region Static
         internal static void InitializeDefaultMeshes()
@@ -33,7 +35,10 @@ namespace LudumGL
         /// <returns></returns>
         public static Mesh Load(string path)
         {
-            Mesh mesh = new Mesh();
+            Mesh mesh = new Mesh()
+            {
+                Path = path
+            };
             a.AssimpContext context = new a.AssimpContext();
             a.Scene scene = context.ImportFile(path, a.PostProcessSteps.Triangulate);
             a.Mesh aMesh = scene.Meshes[0];
@@ -89,6 +94,9 @@ namespace LudumGL
             return newUvs;
         }
         #endregion
+
+        public int Id { get; set; }
+        public string Path { get; private set; }
 
         /// <summary>
         /// The vertices of this mesh.

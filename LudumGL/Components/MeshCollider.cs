@@ -9,7 +9,7 @@ namespace LudumGL.Components
 {
     public class MeshCollider : Collider
     {
-        [SceneName("mesh")]
+        [SceneData]
         public Mesh Mesh { get; set; }
         public MeshCollider(Mesh mesh) : base()
         {

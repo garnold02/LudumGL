@@ -1,4 +1,5 @@
 ﻿using System;
+using LudumGL.Scene;
 
 namespace LudumGL.Components
 {
@@ -6,8 +7,11 @@ namespace LudumGL.Components
     /// Base class for customized components that can be
     /// attached to GameObjects.
     /// </summary>
-    public abstract class Component
+    public abstract class Component : ISceneObject
     {
+        public int Id { get; set; }
+
+        [SceneData]
         bool internalEnabled = true;
 
         public bool Enabled
@@ -25,6 +29,7 @@ namespace LudumGL.Components
         /// <summary>
         /// The parent GameObject of this Component.
         /// </summary>
+        [SceneData]
         public GameObject Parent { get; internal set; }
 
         /// <summary>

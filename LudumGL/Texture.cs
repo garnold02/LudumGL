@@ -4,22 +4,26 @@ using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using System.Drawing.Imaging;
 
+using LudumGL.Scene;
+
 namespace LudumGL
 {
     /// <summary>
     /// 2D texture.
     /// </summary>
-    public class Texture
+    public class Texture : ISceneResource
     {
         #region Static
-        public static Texture LoadFromFile(string path, TextureFilteringMode filteringMode=TextureFilteringMode.Nearest)
+        public static Texture LoadFromFile(string path, TextureFilteringMode filteringMode = TextureFilteringMode.Nearest)
         {
             Bitmap bitmap = new Bitmap(path);
 
             Texture texture = new Texture()
             {
                 Width = bitmap.Width,
-                Height = bitmap.Height
+                Height = bitmap.Height,
+                Path = path,
+                Filtering = filteringMode
             };
             bitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
             BitmapData data = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
@@ -35,6 +39,9 @@ namespace LudumGL
         }
         #endregion
 
+        public int Id { get; set; }
+        public string Path { get; private set; }
+
         /// <summary>
         /// OpenGL texture.
         /// </summary>
@@ -42,6 +49,7 @@ namespace LudumGL
 
         public int Width { get; private set; }
         public int Height { get; private set; }
+        public TextureFilteringMode Filtering { get; private set; }
     }
 
     public enum TextureFilteringMode

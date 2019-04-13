@@ -17,13 +17,13 @@ namespace LudumGL.Components
         /// <summary>
         /// The mass of the body.
         /// </summary>
-        [SceneName("mass")]
+        [SceneData]
         public float Mass { get; set; } = 1;
 
         /// <summary>
         /// How much the object slows down over time.
         /// </summary>
-        [SceneName("drag")]
+        [SceneData]
         public float Drag { get; set; } = 0;
 
         public override void Start()

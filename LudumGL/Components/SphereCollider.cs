@@ -11,8 +11,9 @@ namespace LudumGL.Components
         /// <summary>
         /// The radius of the spehere.
         /// </summary>
-        [SceneName("radius")]
+        [SceneData]
         public float Radius { get; set; } = 1;
+
         public SphereCollider() : base()
         {
             shape = new SphereShape(Radius);

@@ -1,19 +1,23 @@
 ﻿#pragma warning disable CS0649
 using System;
 using OpenTK;
+using LudumGL.Scene;
 
 namespace LudumGL
 {
     /// <summary>
     /// Represents a linear transformation.
     /// </summary>
-    public class Transform
+    public class Transform : ISceneObject
     {
+        public int Id { get; set; }
+
         /// <summary>
         /// Returns the identity transformation.
         /// </summary>
         public static Transform Identity { get => new Transform() { localPosition = new Vector3(0, 0, 0), localRotation = Quaternion.Identity, localScale = new Vector3(1, 1, 1) }; }
 
+        [SceneData]
         public Transform Parent { get; set; } = null;
 
         /// <summary>
@@ -117,16 +121,19 @@ namespace LudumGL
         /// <summary>
         /// The position component of this Transform.
         /// </summary>
+        [SceneData]
         public Vector3 localPosition=new Vector3(0,0,0);
 
         /// <summary>
         /// The rotation component of this Transform.
         /// </summary>
+        [SceneData]
         public Quaternion localRotation=Quaternion.Identity;
 
         /// <summary>
         /// The scale component of this Transform.
         /// </summary>
+        [SceneData]
         public Vector3 localScale=new Vector3(1,1,1);
 
         /// <summary>

@@ -3,39 +3,53 @@ using System.Collections.Generic;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
+using LudumGL.Scene;
+
 namespace LudumGL.Rendering
 {
     /// <summary>
     /// All drawable things inherit from this class.
     /// </summary>
-    public abstract class Drawable
+    public abstract class Drawable : ISceneObject
     {
         internal int program;
         internal List<int> shaders;
         internal Dictionary<string, int> uniforms;
 
+        public int Id { get; set; }
+
+        /// <summary>
+        /// List of all the shaders this object uses.
+        /// </summary>
+        [SceneData]
+        public List<Shader> usedShaders;
+
         /// <summary>
         /// The material of this object.
         /// </summary>
+        [SceneData]
         public Material Material { get; set; } = Material.Default;
 
         /// <summary>
         /// The transform of this object.
         /// </summary>
+        [SceneData]
         public Transform Transform { get; set; } = Transform.Identity;
 
         /// <summary>
         /// Specifies which matrices of the used camera should be ignored.
         /// Useful for rendering skyboxes.
         /// </summary>
+        [SceneData]
         public MatrixIgnoreMode CameraIgnore { get; set; } = MatrixIgnoreMode.None;
 
         public Drawable()
         {
             shaders = new List<int>();
             uniforms = new Dictionary<string, int>();
-
             program = GL.CreateProgram();
+
+            usedShaders = new List<Shader>();
         }
 
         /// <summary>
@@ -44,6 +58,18 @@ namespace LudumGL.Rendering
         /// <param name="path"></param>
         /// <param name="type"></param>
         public void AddShader(Shader shader)
+        {
+            int glShader = GL.CreateShader(shader.Type);
+            GL.ShaderSource(glShader, shader.Code);
+            GL.CompileShader(glShader);
+            shaders.Add(glShader);
+            string log = GL.GetShaderInfoLog(glShader);
+            if (log.Length > 0) Console.WriteLine("Shader: {0}", log);
+
+            usedShaders.Add(shader);
+        }
+
+        internal void AddShaderAfterLoad(Shader shader)
         {
             int glShader = GL.CreateShader(shader.Type);
             GL.ShaderSource(glShader, shader.Code);

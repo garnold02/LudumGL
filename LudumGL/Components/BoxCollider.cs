@@ -11,7 +11,7 @@ namespace LudumGL.Components
     /// </summary>
     public class BoxCollider : Collider
     {
-        [SceneName("size")]
+        [SceneData]
         public Vector3 Size { get; set; } = Vector3.One;
 
         public BoxCollider() : base()

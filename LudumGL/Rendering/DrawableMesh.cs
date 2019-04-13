@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
+using LudumGL.Scene;
+
 namespace LudumGL.Rendering
 {
     /// <summary>
@@ -37,6 +39,7 @@ namespace LudumGL.Rendering
         /// The mesh data that will be drawn
         /// using this object.
         /// </summary>
+        [SceneData]
         public Mesh mesh;
 
         public DrawableMesh() : base()

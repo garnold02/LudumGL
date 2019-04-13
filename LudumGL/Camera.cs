@@ -1,12 +1,14 @@
 ﻿using System;
 using OpenTK;
 
+using LudumGL.Scene;
+
 namespace LudumGL
 {
     /// <summary>
     /// Represents a camera in 3D space.
     /// </summary>
-    public class Camera
+    public class Camera : ISceneObject
     {
         #region Static
         /// <summary>
@@ -22,27 +24,33 @@ namespace LudumGL
         public static Camera UI { get; } = new Camera() { Depth = int.MaxValue, ProjectionMode=CameraProjectionMode.Ortograpic };
         #endregion
 
+        public int Id { get; set; }
+
         /// <summary>
         /// The transform of this camera.
         /// </summary>
+        [SceneData]
         public Transform Transform { get; set; } = Transform.Identity;
 
         /// <summary>
         /// The field of view of this camera.
         /// </summary>
+        [SceneData]
         public float FieldOfView { get; set; } = 60;
 
         /// <summary>
         /// Distance to the near clip plane of this camera.
         /// </summary>
+        [SceneData]
         public float NearClip { get; set; } = 0.1f;
 
         /// <summary>
         /// Distance to the far clip plane of this camera.
         /// </summary>
+        [SceneData]
         public float FarClip { get; set; } = 100f;
 
-
+        [SceneData]
         int internalDepth = 0;
         /// <summary>
         /// Determines when objects seen by this camera will be drawn.
