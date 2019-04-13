@@ -77,7 +77,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Camera.cs" />
-    <Compile Include="Component.cs" />
+    <Compile Include="Components\Component.cs" />
     <Compile Include="Components\BoxCollider.cs" />
     <Compile Include="Components\Collider.cs" />
     <Compile Include="Components\MeshCollider.cs" />
@@ -86,6 +86,8 @@
     <Compile Include="Debugging\Debug.cs" />
     <Compile Include="Debugging\FlyingCamera.cs" />
     <Compile Include="Debugging\IDebugObject.cs" />
+    <Compile Include="Scene\ISceneResource.cs" />
+    <Compile Include="Scene\ScenePropertyConverter.cs" />
     <Compile Include="Font.cs" />
     <Compile Include="Random.cs" />
     <Compile Include="Rendering\Drawable.cs" />
@@ -103,8 +105,9 @@
     <Compile Include="Ray.cs" />
     <Compile Include="RaycastData.cs" />
     <Compile Include="Rendering\DrawableText.cs" />
-    <Compile Include="Scene\SceneLoader.cs" />
-    <Compile Include="Scene\SceneName.cs" />
+    <Compile Include="Scene\ISceneObject.cs" />
+    <Compile Include="Scene\SceneManager.cs" />
+    <Compile Include="Scene\SceneData.cs" />
     <Compile Include="Shader.cs" />
     <Compile Include="Shaders.cs" />
     <Compile Include="Texture.cs" />
