@@ -4,6 +4,7 @@ using LudumGL.UserInterface;
 using LudumGL.Debugging;
 using LudumGL.Rendering;
 using LudumGL.Components;
+using LudumGL.Scene;
 using OpenTK;
 using OpenTK.Input;
 
@@ -13,6 +14,7 @@ namespace TestGame
     {
         #region Static
         static Mesh cubeMesh;
+        static readonly Material cubeMaterial = Material.Default;
         #endregion
         public override void Start()
         {
@@ -23,11 +25,17 @@ namespace TestGame
             SetupMeshes();
             Physics.Gravity = Vector3.Zero;
 
+            //SceneManager.Load("scenes/test.scene");
         }
         public override void Update(object sender, FrameEventArgs e)
         {
             if (Input.GetKeyDown(Key.Home)) Game.MouseLocked = !Game.MouseLocked;
             if (Input.GetKeyDown(Key.Escape)) Game.Exit();
+
+            if(Input.GetKeyDown(Key.Enter))
+            {
+                SceneManager.Save("scenes/test.scene");
+            }
 
         }
 
@@ -109,6 +117,7 @@ namespace TestGame
             {
                 Drawable=DrawableMesh.Create(cubeMesh, Shaders.Lit)
             };
+            cube.Drawable.Material = cubeMaterial;
             cube.Transform.Rotate(LudumGL.Random.AngleDeg, LudumGL.Random.AngleDeg, LudumGL.Random.AngleDeg);
             BoxCollider collider = new BoxCollider();
             PhysicsBody body = new PhysicsBody();

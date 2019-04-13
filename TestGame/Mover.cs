@@ -1,5 +1,6 @@
 ﻿using System;
 using LudumGL;
+using LudumGL.Components;
 using OpenTK;
 namespace TestGame
 {
