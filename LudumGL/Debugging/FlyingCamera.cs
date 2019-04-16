@@ -12,6 +12,7 @@ namespace LudumGL.Debugging
     {
         public Camera Camera { get; } = new Camera() { FarClip=1000f};
         public float Speed { get; set; } = 0.5f;
+        public bool NeedsMouseInput { get; set; }
 
         public float RotationSpeed { get; set; } = 2f;
 
@@ -32,32 +33,35 @@ namespace LudumGL.Debugging
 
         public void Update()
         {
-            if (Input.GetKey(Key.W))
+            if(!NeedsMouseInput || Input.GetButtonDown(MouseButton.Right))
             {
-                Camera.Transform.localPosition += Camera.Transform.Forward * Speed;
+                if (Input.GetKey(Key.W))
+                {
+                    Camera.Transform.localPosition += Camera.Transform.Forward * Speed;
+                }
+                if (Input.GetKey(Key.S))
+                {
+                    Camera.Transform.localPosition -= Camera.Transform.Forward * Speed;
+                }
+                if (Input.GetKey(Key.A))
+                {
+                    Camera.Transform.localPosition -= Camera.Transform.Right * Speed;
+                }
+                if (Input.GetKey(Key.D))
+                {
+                    Camera.Transform.localPosition += Camera.Transform.Right * Speed;
+                }
+                if (Input.GetKey(Key.Q))
+                {
+                    Camera.Transform.Rotate(0, 0, -RotationSpeed);
+                }
+                if (Input.GetKey(Key.E))
+                {
+                    Camera.Transform.Rotate(0, 0, RotationSpeed);
+                }
+                if (Game.window.Focused)
+                    Camera.Transform.Rotate(-Input.MouseDelta.Y, -Input.MouseDelta.X, 0);
             }
-            if (Input.GetKey(Key.S))
-            {
-                Camera.Transform.localPosition -= Camera.Transform.Forward * Speed;
-            }
-            if (Input.GetKey(Key.A))
-            {
-                Camera.Transform.localPosition -= Camera.Transform.Right * Speed;
-            }
-            if (Input.GetKey(Key.D))
-            {
-                Camera.Transform.localPosition += Camera.Transform.Right * Speed;
-            }
-            if (Input.GetKey(Key.Q))
-            {
-                Camera.Transform.Rotate(0, 0, -RotationSpeed);
-            }
-            if (Input.GetKey(Key.E))
-            {
-                Camera.Transform.Rotate(0, 0, RotationSpeed);
-            }
-            if(Game.MouseLocked)
-                Camera.Transform.Rotate(-Input.MouseDelta.Y, -Input.MouseDelta.X, 0);
         }
 
         public void Render()
