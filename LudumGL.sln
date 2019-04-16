@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LudumGL", "LudumGL\LudumGL.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestGame", "TestGame\TestGame.csproj", "{89FE3EED-111C-4086-A957-42CE1FD3EA1A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LevelEditor", "LevelEditor\LevelEditor.csproj", "{0B7DDAFD-ED5E-4CDC-ABC0-00F3508AD5D9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,14 @@ Global
 		{89FE3EED-111C-4086-A957-42CE1FD3EA1A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{89FE3EED-111C-4086-A957-42CE1FD3EA1A}.Release|x64.ActiveCfg = Release|x64
 		{89FE3EED-111C-4086-A957-42CE1FD3EA1A}.Release|x64.Build.0 = Release|x64
+		{0B7DDAFD-ED5E-4CDC-ABC0-00F3508AD5D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B7DDAFD-ED5E-4CDC-ABC0-00F3508AD5D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B7DDAFD-ED5E-4CDC-ABC0-00F3508AD5D9}.Debug|x64.ActiveCfg = Debug|x64
+		{0B7DDAFD-ED5E-4CDC-ABC0-00F3508AD5D9}.Debug|x64.Build.0 = Debug|x64
+		{0B7DDAFD-ED5E-4CDC-ABC0-00F3508AD5D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B7DDAFD-ED5E-4CDC-ABC0-00F3508AD5D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B7DDAFD-ED5E-4CDC-ABC0-00F3508AD5D9}.Release|x64.ActiveCfg = Release|Any CPU
+		{0B7DDAFD-ED5E-4CDC-ABC0-00F3508AD5D9}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
