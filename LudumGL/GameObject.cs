@@ -114,6 +114,12 @@ namespace LudumGL
         }
 
         /// <summary>
+        /// The name of this GameObject. Doesn't need to be unique.
+        /// </summary>
+        [SceneData]
+        public string Name { get; set; } = "GameObject";
+
+        /// <summary>
         /// The transform of this GameObject.
         /// </summary>
         [SceneData]
