@@ -6,7 +6,7 @@ namespace LudumGL.Scene
     /// Attribute used to specify the name of a field
     /// used in scene saving and loading.
     /// </summary>
-    class SceneData : Attribute
+    public class SceneData : Attribute
     {
 
     }

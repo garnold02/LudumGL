@@ -2,13 +2,18 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Windows.Forms;
+using System.Reflection;
+using System.Linq;
 using LudumGL;
+using LudumGL.Components;
 
 namespace LevelEditor
 {
     static class Program
     {
         public static List<GameObject> sceneObjects;
+
+        public static List<Type> componentTypes;
 
         /// <summary>
         /// The main entry point for the application.
@@ -38,6 +43,17 @@ namespace LevelEditor
         static void Initialize()
         {
             sceneObjects = new List<GameObject>();
+            componentTypes = new List<Type>();
+
+            Assembly mainAssembly = typeof(Program).Assembly;
+            AssemblyName[] assemblies = mainAssembly.GetReferencedAssemblies();
+            foreach (AssemblyName name in assemblies)
+            {
+                Assembly assembly = Assembly.Load(name);
+                Type[] types = assembly.GetTypes();
+                Type[] components = types.Where(type => type.IsSubclassOf(typeof(Component))).ToArray();
+                componentTypes.AddRange(components);
+            }
         }
 
         public static void AddObject(GameObject gameObject)

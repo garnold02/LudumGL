@@ -75,6 +75,7 @@
     <Compile Include="ComponentEditor.Designer.cs">
       <DependentUpon>ComponentEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="EditorComponent.cs" />
     <Compile Include="ObjectEditor.cs">
       <SubType>Form</SubType>
     </Compile>
