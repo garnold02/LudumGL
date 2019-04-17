@@ -32,6 +32,10 @@
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.removeComponentButton = new System.Windows.Forms.Button();
+            this.addComponentButton = new System.Windows.Forms.Button();
+            this.propertyValueBox = new System.Windows.Forms.TextBox();
+            this.componentSelectorBox = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // componentList
@@ -41,6 +45,7 @@
             this.componentList.Name = "componentList";
             this.componentList.Size = new System.Drawing.Size(120, 160);
             this.componentList.TabIndex = 0;
+            this.componentList.SelectedIndexChanged += new System.EventHandler(this.componentList_SelectedIndexChanged);
             // 
             // comboBox1
             // 
@@ -68,11 +73,49 @@
             this.label2.TabIndex = 3;
             this.label2.Text = "Component list";
             // 
+            // removeComponentButton
+            // 
+            this.removeComponentButton.Enabled = false;
+            this.removeComponentButton.Location = new System.Drawing.Point(144, 167);
+            this.removeComponentButton.Name = "removeComponentButton";
+            this.removeComponentButton.Size = new System.Drawing.Size(121, 23);
+            this.removeComponentButton.TabIndex = 4;
+            this.removeComponentButton.Text = "Remove component";
+            this.removeComponentButton.UseVisualStyleBackColor = true;
+            // 
+            // addComponentButton
+            // 
+            this.addComponentButton.Location = new System.Drawing.Point(144, 111);
+            this.addComponentButton.Name = "addComponentButton";
+            this.addComponentButton.Size = new System.Drawing.Size(121, 23);
+            this.addComponentButton.TabIndex = 5;
+            this.addComponentButton.Text = "Add component";
+            this.addComponentButton.UseVisualStyleBackColor = true;
+            // 
+            // propertyValueBox
+            // 
+            this.propertyValueBox.Location = new System.Drawing.Point(144, 57);
+            this.propertyValueBox.Name = "propertyValueBox";
+            this.propertyValueBox.Size = new System.Drawing.Size(121, 20);
+            this.propertyValueBox.TabIndex = 6;
+            // 
+            // componentSelectorBox
+            // 
+            this.componentSelectorBox.FormattingEnabled = true;
+            this.componentSelectorBox.Location = new System.Drawing.Point(144, 140);
+            this.componentSelectorBox.Name = "componentSelectorBox";
+            this.componentSelectorBox.Size = new System.Drawing.Size(121, 21);
+            this.componentSelectorBox.TabIndex = 7;
+            // 
             // ComponentEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(272, 206);
+            this.Controls.Add(this.componentSelectorBox);
+            this.Controls.Add(this.propertyValueBox);
+            this.Controls.Add(this.addComponentButton);
+            this.Controls.Add(this.removeComponentButton);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.comboBox1);
@@ -90,5 +133,9 @@
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button removeComponentButton;
+        private System.Windows.Forms.Button addComponentButton;
+        private System.Windows.Forms.TextBox propertyValueBox;
+        private System.Windows.Forms.ComboBox componentSelectorBox;
     }
 }

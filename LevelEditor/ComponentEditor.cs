@@ -15,6 +15,15 @@ namespace LevelEditor
         public ComponentEditor()
         {
             InitializeComponent();
+            foreach (Type type in Program.componentTypes)
+            {
+                componentSelectorBox.Items.Add(type.Name);
+            }
+        }
+
+        private void componentList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
