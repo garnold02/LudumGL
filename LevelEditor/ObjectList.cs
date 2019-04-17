@@ -62,5 +62,14 @@ namespace LevelEditor
             };
             editorWindow.Show();
         }
+
+        private void removeObjectButton_Click(object sender, EventArgs e)
+        {
+            DialogResult dialogResult = MessageBox.Show("Are you sure?", "Remove object", MessageBoxButtons.YesNo);
+            if(dialogResult==DialogResult.Yes)
+            {
+                Program.RemoveObject(selectedGameObject);
+            }
+        }
     }
 }

@@ -31,6 +31,7 @@
             this.objectListBox = new System.Windows.Forms.ListBox();
             this.addObjectButton = new System.Windows.Forms.Button();
             this.editObjectButton = new System.Windows.Forms.Button();
+            this.removeObjectButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // objectListBox
@@ -48,14 +49,14 @@
             this.addObjectButton.Name = "addObjectButton";
             this.addObjectButton.Size = new System.Drawing.Size(215, 23);
             this.addObjectButton.TabIndex = 1;
-            this.addObjectButton.Text = "Add Object";
+            this.addObjectButton.Text = "Add object";
             this.addObjectButton.UseVisualStyleBackColor = true;
             this.addObjectButton.Click += new System.EventHandler(this.addObjectButton_Click);
             // 
             // editObjectButton
             // 
             this.editObjectButton.Enabled = false;
-            this.editObjectButton.Location = new System.Drawing.Point(12, 402);
+            this.editObjectButton.Location = new System.Drawing.Point(12, 431);
             this.editObjectButton.Name = "editObjectButton";
             this.editObjectButton.Size = new System.Drawing.Size(215, 23);
             this.editObjectButton.TabIndex = 2;
@@ -63,11 +64,22 @@
             this.editObjectButton.UseVisualStyleBackColor = true;
             this.editObjectButton.Click += new System.EventHandler(this.editObjectButton_Click);
             // 
+            // removeObjectButton
+            // 
+            this.removeObjectButton.Location = new System.Drawing.Point(12, 402);
+            this.removeObjectButton.Name = "removeObjectButton";
+            this.removeObjectButton.Size = new System.Drawing.Size(215, 23);
+            this.removeObjectButton.TabIndex = 3;
+            this.removeObjectButton.Text = "Remove object";
+            this.removeObjectButton.UseVisualStyleBackColor = true;
+            this.removeObjectButton.Click += new System.EventHandler(this.removeObjectButton_Click);
+            // 
             // ObjectList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(239, 433);
+            this.ClientSize = new System.Drawing.Size(239, 462);
+            this.Controls.Add(this.removeObjectButton);
             this.Controls.Add(this.editObjectButton);
             this.Controls.Add(this.addObjectButton);
             this.Controls.Add(this.objectListBox);
@@ -82,5 +94,6 @@
         private System.Windows.Forms.ListBox objectListBox;
         private System.Windows.Forms.Button addObjectButton;
         private System.Windows.Forms.Button editObjectButton;
+        private System.Windows.Forms.Button removeObjectButton;
     }
 }
