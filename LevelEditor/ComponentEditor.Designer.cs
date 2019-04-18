@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.componentList = new System.Windows.Forms.ListBox();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.propertyComboBox = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.removeComponentButton = new System.Windows.Forms.Button();
@@ -47,13 +47,14 @@
             this.componentList.TabIndex = 0;
             this.componentList.SelectedIndexChanged += new System.EventHandler(this.componentList_SelectedIndexChanged);
             // 
-            // comboBox1
+            // propertyComboBox
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(144, 30);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 21);
-            this.comboBox1.TabIndex = 1;
+            this.propertyComboBox.FormattingEnabled = true;
+            this.propertyComboBox.Location = new System.Drawing.Point(144, 30);
+            this.propertyComboBox.Name = "propertyComboBox";
+            this.propertyComboBox.Size = new System.Drawing.Size(121, 21);
+            this.propertyComboBox.TabIndex = 1;
+            this.propertyComboBox.SelectedIndexChanged += new System.EventHandler(this.propertyComboBox_SelectedIndexChanged);
             // 
             // label1
             // 
@@ -106,6 +107,7 @@
             this.componentSelectorBox.Name = "componentSelectorBox";
             this.componentSelectorBox.Size = new System.Drawing.Size(121, 21);
             this.componentSelectorBox.TabIndex = 7;
+            this.componentSelectorBox.SelectedIndexChanged += new System.EventHandler(this.componentSelectorBox_SelectedIndexChanged);
             // 
             // ComponentEditor
             // 
@@ -118,7 +120,7 @@
             this.Controls.Add(this.removeComponentButton);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.propertyComboBox);
             this.Controls.Add(this.componentList);
             this.Name = "ComponentEditor";
             this.Text = "Component editor";
@@ -130,7 +132,7 @@
         #endregion
 
         private System.Windows.Forms.ListBox componentList;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox propertyComboBox;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button removeComponentButton;

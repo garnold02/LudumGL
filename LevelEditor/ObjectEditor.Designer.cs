@@ -52,6 +52,7 @@
             this.customizeButton = new System.Windows.Forms.Button();
             this.nameBox = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -271,11 +272,21 @@
             this.label13.TabIndex = 23;
             this.label13.Text = "Name";
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(15, 206);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(225, 23);
+            this.button1.TabIndex = 24;
+            this.button1.Text = "Graphics editor";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
             // ObjectEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(264, 210);
+            this.ClientSize = new System.Drawing.Size(264, 241);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.label13);
             this.Controls.Add(this.nameBox);
             this.Controls.Add(this.customizeButton);
@@ -334,6 +345,7 @@
         private System.Windows.Forms.Button customizeButton;
         private System.Windows.Forms.TextBox nameBox;
         private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Button button1;
     }
 }
 

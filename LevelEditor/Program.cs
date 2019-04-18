@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Linq;
 using LudumGL;
 using LudumGL.Components;
+using LudumGL.Scene;
 
 namespace LevelEditor
 {
@@ -14,6 +15,8 @@ namespace LevelEditor
         public static List<GameObject> sceneObjects;
 
         public static List<Type> componentTypes;
+
+        public static Dictionary<string, ISceneResource> resources;
 
         /// <summary>
         /// The main entry point for the application.
@@ -31,7 +34,7 @@ namespace LevelEditor
 
             Game.gameLoop = new SceneViewLoop();
             Game.initialSettigns = new InitialSettings() { Title = "Scene viewer", Width = 640, Height = 480 };
-            Application.Run(new ObjectList());
+            Application.Run(new LevelEditor());
         }
 
         static void SceneViewThread()
@@ -44,6 +47,7 @@ namespace LevelEditor
         {
             sceneObjects = new List<GameObject>();
             componentTypes = new List<Type>();
+            resources = new Dictionary<string, ISceneResource>();
 
             Assembly mainAssembly = typeof(Program).Assembly;
             AssemblyName[] assemblies = mainAssembly.GetReferencedAssemblies();

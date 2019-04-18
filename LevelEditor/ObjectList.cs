@@ -23,6 +23,7 @@ namespace LevelEditor
             InitializeComponent();
             Program.SceneObjectListChanged += UpdateList;
             objectListBox.SelectedIndexChanged += SelectedObject;
+            UpdateList(null, new EventArgs());
         }
 
         private void objectListBox_SelectedIndexChanged(object sender, EventArgs e)
